@@ -56,7 +56,7 @@ Este repositório contém o **Joystick-Juice**, uma plataforma voltada exclusiva
 
 Acesse o código completo em:
 
-🔗 [GitHub - Sistema de Gestão do AEE](https://github.com/Mxrlrey/Joystick-Juice)
+🔗 [GitHub - Joystick Juice](https://github.com/Mxrlrey/Joystick-Juice)
 
 ---
 
