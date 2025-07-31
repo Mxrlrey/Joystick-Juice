@@ -65,6 +65,7 @@ Acesse o código completo em:
 Projeto realizado como **atividade avaliativa** da disciplina _Linguagem de Programação Orientada a Objetos_.
 
 Desenvolvido por:
+- Djavan Teixeira Lopes
 - Gabriel Rocha Gomes
 - Marley Teixeira Meira
 
