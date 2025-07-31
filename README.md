@@ -48,7 +48,7 @@ Este repositório contém o **Joystick-Juice**, uma plataforma voltada exclusiva
 - **MySQL**: banco de dados relacional para armazenamento de usuários, jogos, reviews e listas.  
 - **Python**: lógica de backend, APIs e scripts de análise.  
 - **Visual Studio Code**: IDE principal para desenvolvimento.  
-- **Frameworks e Bibliotecas**: (ex. Flask, Django, SQLAlchemy) – configure de acordo com sua escolha.  
+- **Django**: Django.  
 
 ---
 
@@ -61,8 +61,6 @@ Acesse o código completo em:
 ---
 
 ## 👨‍💻 Autor
-
-Projeto realizado como **atividade avaliativa** da disciplina _Linguagem de Programação Orientada a Objetos_.
 
 Desenvolvido por:
 - Djavan Teixeira Lopes
