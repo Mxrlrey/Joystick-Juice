@@ -69,6 +69,28 @@ Este repositório contém o **Joystick-Juice**, uma plataforma voltada exclusiva
 
 ---
 
+## 📋 Requisitos Não Funcionais
+
+| ID     | Descrição                                                                                                                   | Prioridade | Módulo               |
+|--------|-----------------------------------------------------------------------------------------------------------------------------|------------|----------------------|
+| RNF001 | O sistema deve utilizar protocolo HTTPS para garantir segurança na transmissão de dados.                                   | Alta       | Segurança            |
+| RNF002 | Senhas dos usuários devem ser armazenadas com algoritmos de hash seguros (ex: bcrypt).                                      | Alta       | Segurança            |
+| RNF003 | O tempo de resposta para carregamento de páginas deve ser inferior a 2 segundos.                                            | Alta       | Desempenho           |
+| RNF004 | O sistema deve ser responsivo e adaptável a dispositivos móveis e desktops.                                        | Alta       | Interface Usuário    |
+| RNF005 | O site deve estar disponível 99,5% do tempo.                                                                                 | Alta       | Confiabilidade       |
+| RNF006 | O sistema deve ser compatível com os navegadores modernos: Chrome, Firefox, Safari e Edge.                                 | Média      | Compatibilidade      |
+| RNF007 | O sistema deve seguir as diretrizes de acessibilidade WCAG 2.1.                                                             | Média      | Acessibilidade       |
+| RNF008 | A arquitetura do sistema deve permitir fácil escalabilidade para suportar aumento de usuários simultâneos.                 | Média      | Escalabilidade       |
+| RNF009 | O código-fonte deve seguir boas práticas de desenvolvimento (ex: padrão de projeto, separação de camadas, documentação).    | Alta       | Manutenibilidade     |
+| RNF010 | Deve haver backup automático do banco de dados ao menos uma vez por dia.                                                    | Alta       | Confiabilidade       |
+| RNF011 | O sistema deve implementar logs de erro e logs administrativos com data, hora e autor da ação.                             | Alta       | Auditabilidade       |
+| RNF012 | A recuperação de falhas deve apresentar mensagens de erro amigáveis ao usuário e registrar os erros para análise posterior. | Média      | Confiabilidade       |
+| RNF013 | O sistema deve suportar até 1000 usuários simultâneos sem degradação perceptível de performance.                           | Média      | Desempenho           |
+| RNF014 | Deve haver testes automatizados para funcionalidades críticas do sistema.                                                   | Média      | Qualidade / Testes   |
+| RNF015 | O sistema deve permitir rastrear ações administrativas, como exclusão de reviews ou bloqueio de contas.                    | Alta       | Segurança / Auditoria|
+
+---
+
 ## 🛠️ Tecnologias Utilizadas
 
 - **MySQL**: banco de dados relacional para armazenamento de usuários, jogos, reviews e listas.  
