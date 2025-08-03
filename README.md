@@ -64,8 +64,7 @@ Este repositório contém o **Joystick-Juice**, uma plataforma voltada exclusiva
 | RF014  | Na lista de jogos do usuário, deve ser possível visualizar todos os jogos que ele adicionou, organizados por status; adicionar, editar ou remover comentários; e adicionar ou remover jogos da lista. | Alta       | Listas de Jogos    |
 | RF015  | Ao acessar a página de um jogo específico, deve ser possível ver sua sinopse, nota, popularidade, desenvolvedora, criadores e as reviews feitas pelos usuários. | Alta       | Catálogo de Jogos  |
 | RF016  | O sistema deve permitir ao usuário avaliar e comentar nas reviews de outros usuários (ex: curtir, responder, denunciar).        | Média      | Reviews / Social   |
-| RF017  | O sistema deve permitir ver rankings dos jogos mais populares, mais bem avaliados ou mais comentados.                          | Média      | Rankings           |
-| RF018  | O sistema deve ter um mecanismo de busca avançada com múltiplos filtros combinados (gênero + plataforma + nota mínima, etc).   | Alta       | Busca              |
+| RF017  | O sistema deve ter um mecanismo de busca avançada com múltiplos filtros combinados (gênero + plataforma + nota mínima, etc).   | Alta       | Busca              |
 
 ---
 
