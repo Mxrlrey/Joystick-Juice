@@ -1,2 +1,4 @@
 Django>=4.2,<5.0
-mysqlclient>=2.2
+gunicorn
+psycopg2-binary
+python-dotenv

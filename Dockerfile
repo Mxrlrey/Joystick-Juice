@@ -1,23 +1,23 @@
-FROM python:3.13.5-slim
+FROM python:3.13-slim
 
-# Evita buffering no console (importante para logs no Docker)
-ENV PYTHONUNBUFFERED=1
+# Adiciona variável para compatibilidade com PostgreSQL
+ENV PYTHONUNBUFFERED=1 \
+    LANG=C.UTF-8 \
+    LC_ALL=C.UTF-8
 
 WORKDIR /app
 
-# Instala dependências do sistema necessárias para compilar o mysqlclient
-RUN apt-get update && apt-get install -y gcc default-libmysqlclient-dev pkg-config
+# Instala dependências do sistema para PostgreSQL
+RUN apt-get update && \
+    apt-get install -y gcc libpq-dev && \
+    rm -rf /var/lib/apt/lists/*
 
-# Copia o requirements e instala
-COPY requirements.txt .
-RUN pip install --upgrade pip
-RUN pip install -r requirements.txt
+COPY requirements.txt ./
+RUN pip install --upgrade pip && \
+    pip install --no-cache-dir -r requirements.txt
 
-# Copia o restante do código do projeto
-COPY . .
+COPY . ./
 
-# Expõe a porta do Django
 EXPOSE 8000
 
-# Comando padrão ao iniciar o container
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+CMD ["gunicorn", "joystickjuice.wsgi:application", "--bind", "0.0.0.0:8000"]
