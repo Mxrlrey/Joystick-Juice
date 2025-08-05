@@ -1,7 +1,8 @@
 FROM python:3.13-slim
 
-# Adiciona variável para compatibilidade com PostgreSQL
+# Variáveis de ambiente
 ENV PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
     LANG=C.UTF-8 \
     LC_ALL=C.UTF-8
 
@@ -12,11 +13,14 @@ RUN apt-get update && \
     apt-get install -y gcc libpq-dev && \
     rm -rf /var/lib/apt/lists/*
 
-COPY requirements.txt ./
+# Copia APENAS os requirements primeiro para melhor cache
+COPY ./app/requirements.txt ./
+
 RUN pip install --upgrade pip && \
     pip install --no-cache-dir -r requirements.txt
 
-COPY . ./
+# Copia APENAS o código do Django (pasta app)
+COPY ./app /app
 
 EXPOSE 8000
 
