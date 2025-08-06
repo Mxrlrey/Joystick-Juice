@@ -15,20 +15,6 @@ services:
       timeout: 5s
       retries: 5
 
-  flyway:
-    image: flyway/flyway:9.22.0
-    depends_on:
-      db:
-        condition: service_healthy 
-    volumes:
-      - ./db/migrations:/flyway/sql
-      - ./flyway.conf:/flyway/conf/flyway.conf
-    environment:
-      POSTGRES_DB: ${POSTGRES_DB}
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-    command: migrate  
-
   web:
     build: .
     command: python manage.py runserver 0.0.0.0:8000
@@ -36,8 +22,6 @@ services:
       - ./app:/app  
     ports:
       - "8000:8000"
-    depends_on:
-      - flyway
     environment:
       DJANGO_SETTINGS_MODULE: joystickjuice.settings
       DB_HOST: db
