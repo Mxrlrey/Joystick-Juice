@@ -18,8 +18,9 @@ from django.contrib import admin
 from django.urls import include, path
 
 urlpatterns = [
+    # nome principal da url /exemple; include do app  para buscar as urls dele;
     path('admin/', admin.site.urls),
-    path('game/', include('app.Games.urls')),
+    path('game/', include('Games.urls')),
 ]
 
 
