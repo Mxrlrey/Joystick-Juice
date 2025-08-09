@@ -21,7 +21,7 @@ services:
     volumes:
       - ./app:/app  
     ports:
-      - "8000:8000"
+      - "8001:8001"
     environment:
       DJANGO_SETTINGS_MODULE: joystickjuice.settings
       DB_HOST: db
