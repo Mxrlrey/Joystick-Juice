@@ -19,3 +19,9 @@ class UserDeleteView(DeleteView):
     model = User
     template_name = 'user_confirm_delete.html'
     success_url = reverse_lazy('user_list')
+
+class UserUpdateView(UpdateView):
+    model = User
+    form_class = UserForm
+    template_name = 'user_update.html'
+    success_url = reverse_lazy('user_list')
