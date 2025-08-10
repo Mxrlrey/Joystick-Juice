@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block title %}Lista de Users{% endblock %}
+
+{% block content %}
+<h1>Lista de users</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+        <th scope="col">id</th>
+        <th scope="col">nome</th>
+        <th scope="col">email</th>
+        <th scope="col">nickname</th>
+        <th scope="col">ações</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for user in users %} 
+            <tr>
+                <th scope="row">{{ user.personID }}</th>
+                <td>{{ user.name }}</td>
+                <td>{{ user.email }}</td>
+                <td>{{ user.nickname }}</td>
+                <td>
+                    <form action="{% url 'user_delete' user.personID %}" method="post" style="display:inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger">Excluir</button>
+                    </form>
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

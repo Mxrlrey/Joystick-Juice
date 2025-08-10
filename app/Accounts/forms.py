@@ -1,0 +1,13 @@
+from django import forms
+from .models import User
+
+class UserForm(forms.ModelForm):
+    password = forms.CharField(widget=forms.PasswordInput)
+
+    class Meta:
+        model = User
+        fields = ['name', 'email', 'birthdate', 'gender', 'password', 'nickname']
+        widgets = {
+            'birthdate': forms.DateInput(attrs={'type': 'date'}),
+            'gender': forms.Select(),
+        }

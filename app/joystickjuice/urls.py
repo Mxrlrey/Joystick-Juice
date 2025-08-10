@@ -21,6 +21,8 @@ urlpatterns = [
     # nome principal da url /exemple; include do app  para buscar as urls dele;
     path('admin/', admin.site.urls),
     path('game/', include('Games.urls')),
+    path('', include('Accounts.urls')),
+    # url raiz do site, redireciona para a home do app Games
 ]
 
 

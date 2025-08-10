@@ -14,7 +14,7 @@ class Person(models.Model):
 
 class User(Person):
     nickname = models.CharField(max_length=45)
-    bio = models.TextField(max_length=200)
+    bio = models.TextField(max_length=200, null=True, blank=True)
     
 
 class Moderator(Person):
