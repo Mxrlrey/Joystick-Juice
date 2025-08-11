@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block css %}
+<link href="{% static 'css/games.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block title %}gamezinho{% endblock %}
+
+{% block content %}
+
+<h1 class="jogao">Cuphead</h1>
+
+<h3 class="descricao">Entre no universo vibrante e maluco inspirado nos desenhos animados dos anos 1930.
+     Em Cuphead, você e seu irmão Mugman embarcam em uma jornada para pagar uma dívida com o próprio Diabo.
+     Prepare-se para chefes gigantes, fases cheias de ação e um desafio implacável que vai testar sua paciência
+     e reflexos. Tudo isso com uma trilha sonora jazzística e animações feitas à mão que parecem ter saído direto
+     de um filme antigo.</h3>
+
+<div class="tag">
+   <h3 class="tags"> Tags: </h3>
+   <span class="tagss"> cuphead, jogo de plataforma, run and gun, coop local, jogo retrô, animação anos 30,
+     jogo difícil, chefes desafiadores, indie, mdhr, desenho animado, boss fight, bullet hell,
+     ação, aventura
+   </span>
+</div>
+
+
+<h2 class="avlctitulo">Avaliações</h2>
+
+<div class="avaliacao">
+  <div class="chart-container" id="chart">
+    <!-- As colunas das barras serão inseridas aqui via JavaScript -->
+  </div>
+</div>
+
+
+{% endblock %}
