@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Lista de Jogos - Joystick Juice</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #000016;
+    color: #fff4e6;
+    margin: 0; padding: 20px;
+  }
+  h1 {
+    font-family: 'Press Start 2P', cursive;
+    color: #f17a0d;
+    text-align: center;
+    margin-bottom: 30px;
+  }
+  .game-list {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  .game-card {
+    background-color: #021e34;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 15px;
+    display: flex;
+    gap: 15px;
+    align-items: center;
+  }
+  .game-card img {
+    width: 120px;
+    border-radius: 6px;
+  }
+  .game-info {
+    flex-grow: 1;
+  }
+  .game-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin: 0 0 8px 0;
+    color: #f17a0d;
+  }
+  .game-genre, .game-release, .game-synopsis {
+    margin: 3px 0;
+  }
+  .game-synopsis {
+    font-size: 14px;
+    opacity: 0.8;
+  }
+</style>
+</head>
+<body>
+  <h1>Jogos Cadastrados</h1>
+  <div class="game-list">
+    {% if jogos %}
+      {% for jogo in jogos %}
+      <div class="game-card">
+        {% if jogo.cover_url %}
+          <img src="{{ jogo.cover_url }}" alt="{{ jogo.title }} capa" />
+        {% else %}
+          <div style="width:120px; height:160px; background:#333; display:flex; align-items:center; justify-content:center; color:#aaa;">
+            Sem imagem
+          </div>
+        {% endif %}
+        <div class="game-info">
+          <p class="game-title">{{ jogo.title }}</p>
+          <p class="game-genre"><strong>Gênero:</strong> {{ jogo.genre }}</p>
+          <p class="game-release"><strong>Lançamento:</strong> {{ jogo.release_date }}</p>
+          <p class="game-synopsis">{{ jogo.synopsis|default:"Sem descrição." }}</p>
+        </div>
+      </div>
+      {% endfor %}
+    {% else %}
+      <p>Nenhum jogo cadastrado ainda.</p>
+    {% endif %}
+  </div>
+</body>
+</html>
