@@ -5,9 +5,6 @@ from .models import Game
 
 # Create your views here.
 def home(request):
-<<<<<<< HEAD
-    return render(request, 'games.html')
-=======
     return render(request, 'home.html')
 
 def listar_jogos(request):
@@ -31,6 +28,7 @@ def get_igdb_token():
 def preencher_e_salvar(request):
     if request.method == "POST":
         nome_jogo = request.POST.get("nome")
+        
         token = get_igdb_token()
 
         headers = {
@@ -50,6 +48,11 @@ def preencher_e_salvar(request):
 
         if dados:
             jogo = dados[0]
+
+            for game in Game.objects.all():
+                if game.title.lower() == jogo.get("name", "").lower():
+                    # Jogo já existe, não duplicar
+                    return redirect("listar_jogos")
 
             # Extrair gênero (pode ser lista, vamos pegar o primeiro ou vazio)
             genero = ""
@@ -91,4 +94,3 @@ def preencher_e_salvar(request):
         return redirect("listar_jogos")
 
     return render(request, "preencher.html")
->>>>>>> 581e3464fd31460941be64a35c7782e9911bac38

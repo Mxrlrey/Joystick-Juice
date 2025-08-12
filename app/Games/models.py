@@ -2,7 +2,7 @@ from django.db import models
 
 class Game(models.Model):
     gameID = models.AutoField(primary_key=True)
-    title = models.CharField(max_length=100)
+    title = models.CharField(max_length=100, unique=True)  
     genre = models.CharField(max_length=50)
     release_date = models.DateField()
     synopsis = models.TextField()
