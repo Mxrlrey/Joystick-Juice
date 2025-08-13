@@ -41,7 +41,7 @@
 
         {# Link de cancelamento: se object existir, vai para o perfil desse usuário; senão volta pra home #}
         {% if object %}
-          <a href="{% url 'user_profile' object.personID %}" class="btn btn-secondary">Cancelar</a>
+          <a href="{% url 'user_profile' object.pk %}" class="btn btn-secondary">Cancelar</a>
         {% else %}
           <a href="{% url 'home' %}" class="btn btn-secondary">Cancelar</a>
         {% endif %}

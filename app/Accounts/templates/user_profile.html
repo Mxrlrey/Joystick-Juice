@@ -49,7 +49,7 @@
         {% endif %}
       </div>
       <div class="meta">
-        <h2>{{ object.name }}{% if object.nickname %} ({{ object.nickname }}){% endif %}</h2>
+        <h2>{{ object.name }}{% if object.username %} ({{ object.username }}){% endif %}</h2>
         <p><strong>Email:</strong> {{ object.email }}</p>
         <p><strong>Data de nascimento:</strong> {{ object.birthdate }}</p>
         <p><strong>Gênero:</strong>
@@ -71,7 +71,7 @@
 
     <div class="actions">
       {# Link para editar/atualizar bio. Ajuste o name 'user_edit_bio' conforme seu urls.py #}
-      <a class="btn btn-edit" href="{% url 'user_bio' object.personID%}">Editar bio</a>
+      <a class="btn btn-edit" href="{% url 'user_bio' object.pk%}">Editar bio</a>
     </div>
   </div>
 </body>

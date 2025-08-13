@@ -2,14 +2,36 @@ from django.views.generic import CreateView, ListView, DeleteView, UpdateView, D
 from .models import User
 from . import forms
 from django.urls import reverse_lazy
+from django.shortcuts import render, redirect
+from django.contrib.auth import login, authenticate
+from django.contrib import messages
 
 
 # Create your views here.
-class UserRegisterView(CreateView):
-    model = User
-    form_class = forms.UserForm
-    template_name = 'user_form.html' 
-    success_url = reverse_lazy('user_list') 
+
+def register_view(request):
+    if request.method == "POST":
+        form = forms.RegisterForm(request.POST, request.FILES)
+        if form.is_valid():
+            user = form.save()  # Aqui já salva com senha hashada
+            login(request, user) # Faz login automático
+            return redirect("user_login")
+    else:
+        form = forms.RegisterForm()
+    return render(request, "user_register.html", {"form": form})
+
+
+def login_view(request):
+    if request.method == "POST":
+        username = request.POST.get("username")
+        password = request.POST.get("password")
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect("user_profile", pk=user.pk)
+        else:
+            messages.error(request, "Usuário ou senha inválidos")
+    return render(request, "user_login.html")
 
 class UserListView(ListView):
     model = User
@@ -38,3 +60,6 @@ class UpdateBioView(UpdateView):
 class PerfilUserView(DetailView):
     model= User
     template_name = 'user_profile.html'
+
+
+

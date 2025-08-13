@@ -18,18 +18,18 @@
     <tbody>
         {% for user in users %} 
             <tr>
-                <th scope="row">{{ user.personID }}</th>
+                <th scope="row">{{ user.pk}}</th>
                 <td>{{ user.name }}</td>
                 <td>{{ user.email }}</td>
                 <td>{{ user.nickname }}</td>
                 <td>
-                    <a href="{% url 'user_update' user.personID %}" class="btn btn-primary">Atualizar</a>
-                    <form action="{% url 'user_delete' user.personID %}" method="post" style="display:inline;">
+                    <a href="{% url 'user_update' user.pk %}" class="btn btn-primary">Atualizar</a>
+                    <form action="{% url 'user_delete' user.pk %}" method="post" style="display:inline;">
                         {% csrf_token %}
                         <button type="submit" class="btn btn-danger">Excluir</button>
                     </form>   
-                    <a href="{% url 'user_bio' user.personID %}" class="btn btn-secondary">Adicionar bio</a>
-                    <a href="{% url 'user_profile' user.personID %}" class="btn btn-dark">Perfil</a>
+                    <a href="{% url 'user_bio' user.pk %}" class="btn btn-secondary">Adicionar bio</a>
+                    <a href="{% url 'user_profile' user.pk %}" class="btn btn-dark">Perfil</a>
                 </td>
             </tr>
         {% endfor %}
