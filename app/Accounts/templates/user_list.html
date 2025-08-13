@@ -28,6 +28,8 @@
                         {% csrf_token %}
                         <button type="submit" class="btn btn-danger">Excluir</button>
                     </form>   
+                    <a href="{% url 'user_bio' user.personID %}" class="btn btn-secondary">Adicionar bio</a>
+                    <a href="{% url 'user_profile' user.personID %}" class="btn btn-dark">Perfil</a>
                 </td>
             </tr>
         {% endfor %}

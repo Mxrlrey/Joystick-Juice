@@ -111,3 +111,7 @@ body{
   .site-footer .footer-top { gap: .75rem; padding: 0 1rem; }
   .site-footer .footer-links { margin-top: .5rem; }
 }
+
+.clearablefileinput-current {
+    display: none;
+}

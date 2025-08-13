@@ -1,0 +1,52 @@
+<!-- templates/user_create_bio.html -->
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8">
+  <title>Editar Bio</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <style>
+    body { font-family: Arial, Helvetica, sans-serif; padding: 20px; max-width:700px; margin:auto; }
+    .card { border:1px solid #ddd; padding:20px; border-radius:8px; box-shadow: 0 1px 3px rgba(0,0,0,.05); }
+    label { display:block; margin-top:10px; font-weight:600; }
+    textarea { width:100%; min-height:120px; padding:8px; font-size:14px; }
+    .actions { margin-top:15px; display:flex; gap:10px; }
+    .btn { padding:8px 14px; border:0; border-radius:6px; cursor:pointer; }
+    .btn-primary { background:#1976d2; color:#fff; }
+    .btn-secondary { background:#eee; color:#333; }
+    .errors { color:#b00020; margin-bottom:10px; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Editar biografia</h1>
+
+    {% if form.non_field_errors %}
+      <div class="errors">{{ form.non_field_errors }}</div>
+    {% endif %}
+
+    <form method="post">
+      {% csrf_token %}
+
+      {# Mostra erros do campo bio se houver #}
+      {% if form.bio.errors %}
+        <div class="errors">{{ form.bio.errors }}</div>
+      {% endif %}
+
+      <label for="{{ form.bio.id_for_label }}">Biografia</label>
+      {{ form.bio }}
+
+      <div class="actions">
+        <button type="submit" class="btn btn-primary">Salvar</button>
+
+        {# Link de cancelamento: se object existir, vai para o perfil desse usuário; senão volta pra home #}
+        {% if object %}
+          <a href="{% url 'user_profile' object.personID %}" class="btn btn-secondary">Cancelar</a>
+        {% else %}
+          <a href="{% url 'home' %}" class="btn btn-secondary">Cancelar</a>
+        {% endif %}
+      </div>
+    </form>
+  </div>
+</body>
+</html>

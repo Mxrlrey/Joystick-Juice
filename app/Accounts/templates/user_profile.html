@@ -1,0 +1,78 @@
+<!-- templates/user_profile.html -->
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8">
+  <title>Perfil de {{ object.name }}</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <style>
+    body { font-family: Arial, Helvetica, sans-serif; padding:20px; max-width:800px; margin:auto; }
+    .profile { border:1px solid #ddd; padding:20px; border-radius:8px; }
+    .row { display:flex; gap:20px; align-items:center; }
+    .avatar {
+      width: 96px;
+      height: 96px;
+      background: #eee;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      color: #777;
+    }
+    .avatar-img {
+      width: 100%;       /* ocupa todo o espaço da div pai */
+      height: 100%;      /* mesma altura da div pai */
+      object-fit: cover; /* mantém proporção e corta o que ultrapassar */
+      border-radius: 50%; /* deixa a imagem circular */
+      display: block;
+      image-rendering: auto; /* padrão, suaviza */
+      -webkit-optimize-contrast: optimize-contrast; /* para webkit */
+    }
+    .meta { flex:1; }
+    .meta h2 { margin:0 0 6px 0; }
+    .meta p { margin:4px 0; color:#555; }
+    .bio { margin-top:14px; white-space:pre-wrap; }
+    .actions { margin-top:16px; }
+    .btn { padding:8px 12px; border-radius:6px; text-decoration:none; display:inline-block; }
+    .btn-edit { background:#1976d2; color:#fff; }
+  </style>
+</head>
+<body>
+  <div class="profile">
+    <div class="row">
+      <div class="avatar">
+        {% if user.avatar %}
+            <img class="avatar-img" src="{{ user.avatar.url }}" alt="Avatar do usuário">
+        {% else %}
+            {{ object.name|slice:":1"|upper }}
+        {% endif %}
+      </div>
+      <div class="meta">
+        <h2>{{ object.name }}{% if object.nickname %} ({{ object.nickname }}){% endif %}</h2>
+        <p><strong>Email:</strong> {{ object.email }}</p>
+        <p><strong>Data de nascimento:</strong> {{ object.birthdate }}</p>
+        <p><strong>Gênero:</strong>
+          {% if object.gender == 'M' %}Masculino
+          {% elif object.gender == 'F' %}Feminino
+          {% else %}Outro{% endif %}
+        </p>
+      </div>
+    </div>
+
+    <div class="bio">
+      <h3>Biografia</h3>
+      {% if object.bio %}
+        <p>{{ object.bio }}</p>
+      {% else %}
+        <p><em>Biografia não cadastrada.</em></p>
+      {% endif %}
+    </div>
+
+    <div class="actions">
+      {# Link para editar/atualizar bio. Ajuste o name 'user_edit_bio' conforme seu urls.py #}
+      <a class="btn btn-edit" href="{% url 'user_bio' object.personID%}">Editar bio</a>
+    </div>
+  </div>
+</body>
+</html>
