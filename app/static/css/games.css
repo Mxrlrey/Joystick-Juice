@@ -33,53 +33,259 @@
 }
 
 .avlctitulo {
-    color: aliceblue;
+    color: white;
     margin-left: 700px;
     padding-top: 40px;
 }
 
+/* gráfico */
 .avaliacao {
-    font-family: Arial, sans-serif;
-    max-width: 300px;
-    margin-left: 700px;
-    text-align: center;
-    padding-top: 20px;
-  }
+  font-family: Arial, sans-serif;
+  max-width: 300px;
+  margin-left: 100px;
+  text-align: center;
+  padding-top: 20px;
+}
 
-  .chart-container {
-    display: flex;
-    justify-content: space-around;
-    align-items: flex-end;
-    height: 100px; /* aumentei para visualização melhor */
-    border-left: 2px solid white;
-    border-bottom: 2px solid white;
-    padding-bottom: 30px;
-    margin-bottom: 20px;
-  }
+.chart-container {
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-end;
+  height: 160px; /* espaço para labels */
+  border-left: 2px solid white;
+  border-bottom: 2px solid white;
+  
+  margin-bottom: 20px;
+  position: relative;
+}
 
-  .bar-column {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 50px;
-  }
+.bar-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 60px;
+  position: relative;
+  overflow: visible;
+  cursor: default;
+}
 
-  .bar-fill {
-    width: 40px;
-    background: linear-gradient(180deg, #f39c12, #f1c40f);
-    border-radius: 6px 6px 0 0;
-    transition: height 1s ease;
-    height: 0; /* começa em zero, será alterado pelo JS */
-  }
+/* labels de meia nota (duas por coluna: top e bottom) */
+.half-label-top,
+.half-label-bottom,
+.label {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%) translateY(6px);
+  background: rgba(0,0,0,0.65);
+  color: #fff;
+  padding: 4px 6px;
+  border-radius: 6px;
+  font-size: 12px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .18s ease, transform .18s ease;
+  font-weight: 600;
+}
 
-  .count {
-    margin-top: 6px;
-    font-weight: bold;
-    font-size: 14px;
-  }
+/* posicionamento vertical das duas meia-notas */
+.half-label-top { top: -56px; }
+.half-label-bottom { top: -36px; }
 
-  .label {
-    margin-top: 8px;
-    font-weight: 600;
-    font-size: 16px;
+/* label da nota inteira (ex.: "5 ★") */
+.label { top: -16px; }
+
+/* mostra as labels ao passar o mouse na coluna */
+.bar-column:hover .half-label-top,
+.bar-column:hover .half-label-bottom,
+.bar-column:hover .label {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* barra */
+.bar-fill {
+  width: 20px;
+  background: linear-gradient(180deg, #f39c12, #f1c40f);
+  border-radius: 6px 6px 0 0;
+  transition: height 0.6s ease, background-color 0.18s ease, filter 0.18s ease;
+  height: 0;
+  cursor: pointer;
+}
+
+/* hover visual da barra */
+.bar-fill:hover {
+  /* deixa a barra mais clara ao passar o mouse */
+  background: linear-gradient(180deg, #eda93c, #e7c643);
+  filter: brightness(0.98);
+}
+
+/* quantidade visível sempre */
+.count {
+  margin-top: 6px;
+  font-weight: bold;
+  font-size: 14px;
+  color: white;
+}
+
+/* removi a label fixa com estrela (ficará apenas no hover) */
+.label {
+  font-size: 14px;
+  color: white;
+}
+
+.rating-table {
+  position: absolute;
+  top: 110%;                    /* aparece logo abaixo da coluna */
+  left: 50%;
+  transform: translateX(-50%) translateY(8px);
+  min-width: 160px;
+  max-width: 260px;
+  background: rgba(10, 12, 14, 0.92);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 10px;
+  padding: 10px;
+  color: #fff;
+  font-size: 13px;
+  line-height: 1.3;
+  box-shadow: 0 10px 24px rgba(0,0,0,0.6), 0 2px 6px rgba(0,0,0,0.25);
+  z-index: 60;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .18s ease, transform .18s ease;
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+}
+
+/* Triângulo apontando para a coluna */
+.rating-table::before {
+  content: "";
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-bottom: 8px solid rgba(10, 12, 14, 0.92);
+  z-index: 61;
+}
+
+/* Mostrar o box quando a coluna for hoverada */
+.bar-column:hover .rating-table,
+.bar-fill:hover ~ .rating-table {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+  pointer-events: auto;
+}
+
+/* Tabela interna */
+.rating-table table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: auto;
+}
+
+.rating-table thead th {
+  text-align: left;
+  font-weight: 700;
+  font-size: 13px;
+  padding-bottom: 6px;
+  color: #fff;
+}
+
+.rating-table tbody td {
+  padding: 6px 0;
+  color: #e6e6e6;
+  font-size: 13px;
+  vertical-align: middle;
+  border-bottom: 1px solid rgba(255,255,255,0.03);
+}
+
+/* destaque coluna esquerda (opcional) */
+.rating-table td:first-child {
+  color: #fff;
+  font-weight: 600;
+  width: 48%;
+}
+
+/* última linha sem borda */
+.rating-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* responsividade - reduz um pouco em telas pequenas */
+@media (max-width: 520px) {
+  .rating-table {
+    min-width: 140px;
+    max-width: 200px;
+    padding: 8px;
+    font-size: 12px;
   }
+}
+
+/* custom scroll (WebKit) caso o conteúdo exceda a altura */
+.rating-table::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+.rating-table::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.07);
+  border-radius: 8px;
+}
+
+/*css para avaliar*/
+.painel-acoes {
+  background: rgba(20, 20, 20, 0.8);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 12px;
+  padding: 16px;
+  color: white;
+  max-width: 300px;
+  margin-left: 300px;
+  margin-top: 0%;
+}
+
+.botoes-rapidos {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.acao {
+  background: #1f2937;
+  border: 1px solid rgba(255,255,255,0.2);
+  color: white;
+  padding: 8px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: 0.2s;
+}
+
+.acao:hover {
+  background: #374151;
+}
+
+.avaliar {
+  text-align: center;
+}
+
+.estrelas span {
+  font-size: 26px;
+  cursor: pointer;
+  color: #555;
+  transition: color .2s;
+}
+
+.estrelas span:hover,
+.estrelas span.ativo {
+  color: gold;
+}
+
+.avaliacao-container {
+  display: flex;
+  gap: 30px;
+  align-items: flex-start;
+}

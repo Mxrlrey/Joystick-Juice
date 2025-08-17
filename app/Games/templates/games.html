@@ -25,14 +25,112 @@
    </span>
 </div>
 
-
+<!-- Gráfico/Avaliação -->
 <h2 class="avlctitulo">Avaliações</h2>
 
-<div class="avaliacao">
-  <div class="chart-container" id="chart">
-    <!-- As colunas das barras serão inseridas aqui via JavaScript -->
+<div class="avaliacao-container">
+  
+  <!-- painel do lado esquerdo -->
+  <div class="painel-acoes">
+    <div class="botoes-rapidos">
+      <button class="acao">👁 Assistir</button>
+      <button class="acao">❤️ Curtir</button>
+      <button class="acao">📌 Lista</button>
+    </div>
+
+    <div class="avaliar">
+      <p>Avaliar:</p>
+      <div class="estrelas" id="estrelas">
+        <span data-valor="1">★</span>
+        <span data-valor="2">★</span>
+        <span data-valor="3">★</span>
+        <span data-valor="4">★</span>
+        <span data-valor="5">★</span>
+      </div>
+      <p id="nota-escolhida">Sem avaliação</p>
+    </div>
+  </div>
+
+  <!-- gráfico do lado direito -->
+  <div class="avaliacao">
+    <div class="chart-container" id="chart"></div>
   </div>
 </div>
+
+<script>
+  const votos = {
+    "0.5": 5,
+    "1.0": 8,
+    "1.5": 12,
+    "2.0": 18,
+    "2.5": 30,
+    "3.0": 45,
+    "3.5": 60,
+    "4.0": 80,
+    "4.5": 95,
+    "5.0": 80
+  };
+
+  const valores = ["0.5","1.0","1.5","2.0","2.5","3.0","3.5","4.0","4.5","5.0"];
+
+  const total = Object.values(votos).reduce((a,b) => a + b, 0);
+  const maxCount = Math.max(...Object.values(votos));
+  const chart = document.getElementById('chart');
+
+  valores.forEach(valStr => {
+    const count = votos[valStr] || 0;
+    const percent = total ? Math.round((count / total) * 100) : 0;
+    const height = maxCount ? (count / maxCount) * 140 : 0; // escala até 110px
+
+    const col = document.createElement('div');
+    col.className = 'bar-column';
+
+    // label de valor (aparece só no hover). Formata 1.0 como "1,0" e 2.5 como "2,5"
+    const displayVal = Number(valStr).toFixed(1).replace('.', ',');
+   
+    // barra
+    const bar = document.createElement('div');
+    bar.className = 'bar-fill';
+    bar.style.height = height + 'px';
+
+    
+
+    // tabela de detalhe (aparece no hover)
+    const ratingBox = document.createElement('div');
+    ratingBox.className = 'rating-table';
+    ratingBox.innerHTML = `
+      <table>
+        <thead>
+          <tr><th>Nota</th><th>Detalhe</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>${displayVal}</td><td>Votos: ${count}</td></tr>
+          <tr><td>%</td><td>${percent}%</td></tr>
+          <tr><td>Total</td><td>${total}</td></tr>
+        </tbody>
+      </table>
+    `;
+
+    // ordem dos elementos: label (absoluta), barra, contador, tabela
+   
+    col.appendChild(bar);
+    col.appendChild(ratingBox);
+    chart.appendChild(col);
+  });
+
+   // ---- sistema de estrelas ----
+  const estrelas = document.querySelectorAll('#estrelas span');
+  const saida = document.getElementById('nota-escolhida');
+  estrelas.forEach(e => {
+    e.addEventListener('click', () => {
+      const nota = e.dataset.valor;
+      estrelas.forEach(s => s.classList.remove('ativo'));
+      for (let i = 0; i < nota; i++) estrelas[i].classList.add('ativo');
+      saida.textContent = `Você avaliou com ${nota} estrela${nota>1?'s':''}`;
+    });
+  });
+
+</script>
 
 
 {% endblock %}

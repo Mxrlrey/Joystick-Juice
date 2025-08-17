@@ -11,6 +11,9 @@ def listar_jogos(request):
     jogos = Game.objects.all()
     return render(request, 'listar_jogos.html', {'jogos': jogos})
 
+def games(request):
+    return render(request, 'games.html')
+
 CLIENT_ID = "66vd402qci2oa706lzsxck2myaqput"
 CLIENT_SECRET = "drvthppx8c27f7eryv6qo739r2cfpz"
 
