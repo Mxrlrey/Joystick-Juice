@@ -45,6 +45,13 @@ class UserListView(ListView):
     template_name = 'user_list.html'
     context_object_name = 'users'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        for user in context['users']:
+            user.update_form = forms.UserFormUpdate(instance=user)
+        return context
+
+
 class UserDeleteView(DeleteView):
     model = User
     template_name = 'user_confirm_delete.html'
@@ -53,7 +60,6 @@ class UserDeleteView(DeleteView):
 class UserUpdateView(UpdateView):
     model = User
     form_class = forms.UserFormUpdate
-    template_name = 'user_update.html'
     success_url = reverse_lazy('user_list')
 
 @method_decorator(never_cache, name='dispatch')

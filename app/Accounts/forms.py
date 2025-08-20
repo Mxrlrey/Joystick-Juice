@@ -21,6 +21,9 @@ class UserFormUpdate(forms.ModelForm):
         model = User
         fields = ['name','username', 'email', 'birthdate', 'gender', 'avatar']
         widgets = {
-            'birthdate': forms.DateInput(attrs={'type': 'date'}),
+            'birthdate': forms.DateInput(
+                attrs={'type': 'date', 'class': 'form-control'},  # type date + styling
+                format='%Y-%m-%d' 
+            ),
             'gender': forms.Select(),
         }
