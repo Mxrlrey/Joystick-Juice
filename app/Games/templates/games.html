@@ -5,59 +5,80 @@
 <link href="{% static 'css/games.css' %}" rel="stylesheet">
 {% endblock %}
 
-{% block title %}gamezinho{% endblock %}
+{% block title %}{{ object.title }} — Joystick Juice{% endblock %}
 
 {% block content %}
+<div class="game-container">
 
-<h1 class="jogao">Cuphead</h1>
-
-<h3 class="descricao">Entre no universo vibrante e maluco inspirado nos desenhos animados dos anos 1930.
-     Em Cuphead, você e seu irmão Mugman embarcam em uma jornada para pagar uma dívida com o próprio Diabo.
-     Prepare-se para chefes gigantes, fases cheias de ação e um desafio implacável que vai testar sua paciência
-     e reflexos. Tudo isso com uma trilha sonora jazzística e animações feitas à mão que parecem ter saído direto
-     de um filme antigo.</h3>
-
-<div class="tag">
-   <h3 class="tags"> Tags: </h3>
-   <span class="tagss"> cuphead, jogo de plataforma, run and gun, coop local, jogo retrô, animação anos 30,
-     jogo difícil, chefes desafiadores, indie, mdhr, desenho animado, boss fight, bullet hell,
-     ação, aventura
-   </span>
-</div>
-
-<!-- Gráfico/Avaliação -->
-<h2 class="avlctitulo">Avaliações</h2>
-
-<div class="avaliacao-container">
-  
-  <!-- painel do lado esquerdo -->
-  <div class="painel-acoes">
-    <div class="botoes-rapidos">
-      <button class="acao">👁 Assistir</button>
-      <button class="acao">❤️ Curtir</button>
-      <button class="acao">📌 Lista</button>
-    </div>
-
-    <div class="avaliar">
-      <p>Avaliar:</p>
-      <div class="estrelas" id="estrelas">
-        <span data-valor="1">★</span>
-        <span data-valor="2">★</span>
-        <span data-valor="3">★</span>
-        <span data-valor="4">★</span>
-        <span data-valor="5">★</span>
+  <div class="game-top">
+    <!-- coluna esquerda: cover + ações -->
+    <div class="left-col">
+      <div class="cover-wrap">
+        <img src="{{ object.cover_url }}" alt="{{ object.title }}" class="cover-img">
       </div>
-      <p id="nota-escolhida">Sem avaliação</p>
+
+      <div class="painel-acoes" aria-label="Ações do jogo">
+        <div class="botoes-rapidos" role="toolbar" aria-label="Ações rápidas">
+          <button class="acao" type="button">👁 Assistir</button>
+          <button class="acao" type="button">❤️ Curtir</button>
+          <button class="acao" type="button">📌 Lista</button>
+        </div>
+
+        <div class="avaliar" aria-label="Avaliar">
+          <p style="margin:0;color:var(--muted);font-weight:600">Avaliar</p>
+          <div class="estrelas" id="estrelas" role="radiogroup" aria-label="Estrelas de avaliação">
+            <span data-valor="1" role="radio" aria-checked="false">★</span>
+            <span data-valor="2" role="radio" aria-checked="false">★</span>
+            <span data-valor="3" role="radio" aria-checked="false">★</span>
+            <span data-valor="4" role="radio" aria-checked="false">★</span>
+            <span data-valor="5" role="radio" aria-checked="false">★</span>
+          </div>
+          <p id="nota-escolhida">Sem avaliação</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- coluna direita: título, descrição, tags -->
+    <div class="meta right-col">
+      <h1 class="jogao">{{ object.title }}</h1>
+      <div class="submeta">
+        <span class="tags">Gênero: {{ object.genre }}</span>
+        <span class="tags">Lançamento: {{ object.release_date }}</span>
+      </div>
+
+      <p class="descricao">{{ object.synopsis }}</p>
+
+      <div class="tag">
+        <span class="tags">Plataforma: {{ object.platforms|default:"—" }}</span>
+        {% if object.developer %}<span class="tags">Desenvolvedor: {{ object.developer }}</span>{% endif %}
+      </div>
     </div>
   </div>
 
-  <!-- gráfico do lado direito -->
-  <div class="avaliacao">
-    <div class="chart-container" id="chart"></div>
+  <!-- Avaliações -->
+  <h2 class="avlctitulo">Avaliações</h2>
+
+  <div class="avaliacao-container">
+    <div class="avaliacao" aria-hidden="false">
+      <div class="chart-container" id="chart"></div>
+    </div>
+
+    <aside class="side-stats" aria-label="Estatísticas">
+      <h4>Média geral</h4>
+      <div class="stat-row"><strong style="font-size:20px">4.2</strong><span class="muted">/ 5</span></div>
+      <div style="height:8px"></div>
+      <h4>Total de votos</h4>
+      <div class="stat-row"><span>{{ total_votes|default:"420" }}</span></div>
+      <div style="height:10px"></div>
+      <h4>Distribuição</h4>
+      <div style="font-size:13px;color:var(--muted)">Passe o mouse sobre uma barra para ver detalhe</div>
+    </aside>
   </div>
+
 </div>
 
 <script>
+  /* seu script (mantive a lógica, só garantindo que o chart seja limpo antes) */
   const votos = {
     "0.5": 5,
     "1.0": 8,
@@ -72,30 +93,25 @@
   };
 
   const valores = ["0.5","1.0","1.5","2.0","2.5","3.0","3.5","4.0","4.5","5.0"];
-
   const total = Object.values(votos).reduce((a,b) => a + b, 0);
   const maxCount = Math.max(...Object.values(votos));
   const chart = document.getElementById('chart');
 
+  chart.innerHTML = '';
   valores.forEach(valStr => {
     const count = votos[valStr] || 0;
     const percent = total ? Math.round((count / total) * 100) : 0;
-    const height = maxCount ? (count / maxCount) * 140 : 0; // escala até 110px
+    const height = maxCount ? (count / maxCount) * 140 : 0;
 
     const col = document.createElement('div');
     col.className = 'bar-column';
 
-    // label de valor (aparece só no hover). Formata 1.0 como "1,0" e 2.5 como "2,5"
     const displayVal = Number(valStr).toFixed(1).replace('.', ',');
-   
-    // barra
+
     const bar = document.createElement('div');
     bar.className = 'bar-fill';
     bar.style.height = height + 'px';
 
-    
-
-    // tabela de detalhe (aparece no hover)
     const ratingBox = document.createElement('div');
     ratingBox.className = 'rating-table';
     ratingBox.innerHTML = `
@@ -111,14 +127,12 @@
       </table>
     `;
 
-    // ordem dos elementos: label (absoluta), barra, contador, tabela
-   
     col.appendChild(bar);
     col.appendChild(ratingBox);
     chart.appendChild(col);
   });
 
-   // ---- sistema de estrelas ----
+  // sistema de estrelas (mantive como antes)
   const estrelas = document.querySelectorAll('#estrelas span');
   const saida = document.getElementById('nota-escolhida');
   estrelas.forEach(e => {
@@ -127,10 +141,10 @@
       estrelas.forEach(s => s.classList.remove('ativo'));
       for (let i = 0; i < nota; i++) estrelas[i].classList.add('ativo');
       saida.textContent = `Você avaliou com ${nota} estrela${nota>1?'s':''}`;
+      // atualiza aria
+      estrelas.forEach(s => s.setAttribute('aria-checked','false'));
+      for (let i = 0; i < nota; i++) estrelas[i].setAttribute('aria-checked','true');
     });
   });
-
 </script>
-
-
 {% endblock %}

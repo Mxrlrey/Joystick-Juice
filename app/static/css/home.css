@@ -1,0 +1,81 @@
+/* container do carousel — permitir que os controles fiquem fora */
+#carouselExampleControls {
+  max-width: 1200px;
+  margin: 0 auto;
+  overflow: visible;           /* importante: antes era hidden */
+  position: relative;
+  padding: 0 56px;             /* espaço lateral para os botões externos */
+  box-shadow: 0 8px 28px rgba(0,0,0,.35);
+}
+
+/* imagens mantém comportamento */
+#carouselExampleControls img {
+  max-height: 374px;
+  object-fit: cover;
+}
+
+/* tamanho / estilo dos botões (fora do carousel) */
+#carouselExampleControls .carousel-control-prev,
+#carouselExampleControls .carousel-control-next {
+  width: 48px;
+  height: 48px;
+  border-radius: 10px;
+  background: rgba(0,0,0,0.55);
+  border: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  position: absolute;
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform .12s ease, background .12s ease;
+  box-shadow: 0 6px 18px rgba(2,6,23,0.45);
+}
+
+/* colocar fora: distância negativa em relação ao conteúdo */
+#carouselExampleControls .carousel-control-prev {
+  left: -56px;   /* ajusta para posicionar fora à esquerda */
+}
+#carouselExampleControls .carousel-control-next {
+  right: -56px;  /* ajusta para posicionar fora à direita */
+}
+
+/* melhora visual do ícone (mantém o ícone padrão do Bootstrap centrado) */
+#carouselExampleControls .carousel-control-prev-icon,
+#carouselExampleControls .carousel-control-next-icon {
+  background-size: 20px 20px;
+  filter: drop-shadow(0 4px 8px rgba(0,0,0,0.6));
+}
+
+/* hover */
+#carouselExampleControls .carousel-control-prev:hover,
+#carouselExampleControls .carousel-control-next:hover {
+  transform: translateY(-50%) scale(1.03);
+  background: rgba(0,0,0,0.65);
+}
+
+/* se o layout tiver bordas arredondadas, evita que o botão "corte" visualmente */
+#carouselExampleControls .carousel-inner {
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+/* Responsivo: em telas pequenas reposiciona os botões para dentro do carousel (evita overflow na tela) */
+@media (max-width: 720px) {
+  #carouselExampleControls {
+    padding: 0 12px;
+  }
+  #carouselExampleControls .carousel-control-prev {
+    left: 8px;
+  }
+  #carouselExampleControls .carousel-control-next {
+    right: 8px;
+  }
+  #carouselExampleControls .carousel-control-prev,
+  #carouselExampleControls .carousel-control-next {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+  }
+}

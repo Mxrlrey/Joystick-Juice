@@ -1,18 +1,21 @@
 import requests
 from datetime import datetime
+from django.views.generic import CreateView, ListView, DeleteView, UpdateView, DetailView
 from django.shortcuts import render, redirect
 from .models import Game
 
 # Create your views here.
 def home(request):
-    return render(request, 'home.html')
+    games = Game.objects.all() 
+    return render(request, 'home.html', {'games': games})
 
 def listar_jogos(request):
     jogos = Game.objects.all()
     return render(request, 'listar_jogos.html', {'jogos': jogos})
 
-def games(request):
-    return render(request, 'games.html')
+class games(DetailView):
+    model = Game
+    template_name = 'games.html'
 
 CLIENT_ID = "66vd402qci2oa706lzsxck2myaqput"
 CLIENT_SECRET = "drvthppx8c27f7eryv6qo739r2cfpz"
@@ -84,6 +87,10 @@ def preencher_e_salvar(request):
             capa_url = jogo.get("cover", {}).get("url", "")
             if capa_url and capa_url.startswith("//"):
                 capa_url = "https:" + capa_url
+
+            if capa_url:
+                capa_url = capa_url.replace("t_thumb", "t_cover_big")
+
 
             # Criar o objeto Game
             Game.objects.create(

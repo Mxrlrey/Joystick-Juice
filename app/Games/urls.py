@@ -6,5 +6,5 @@ urlpatterns = [
     path('home/', views.home, name='home'),
     path('listar/', views.listar_jogos, name='listar_jogos'),
     path('preencher/', views.preencher_e_salvar, name='preencher_e_salvar'),
-    path('games/', views.games, name='games'),
+    path('games/<int:pk>/', views.games.as_view(), name='games'),
 ]

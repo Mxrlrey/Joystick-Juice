@@ -1,291 +1,211 @@
-.jogao{
-    color: white !important;
-    margin-top: 150px;
-    margin-left: 700px;
+/* Reset/vars rápidos */
+:root{
+  --bg: #071019;
+  --card: #0f1720;
+  --muted: #9fb3c8;
+  --accent: #6dd3ff;
+  --glass: rgba(255,255,255,0.04);
+  --radius: 12px;
+  --gap: 18px;
+  --max-w: 1100px;
+  --text: #e6eef8;
+  --soft: rgba(255,255,255,0.06);
+  --panel: rgba(15,23,28,0.6);
+  --btn-bg: #0f1724;
 }
 
-.descricao{
-    font-size: 15px;
-    color: white;
-    max-width: 300px;
-    margin-left: 700px;
-    padding-top: 20px;
+/* Container geral */
+.game-container{
+  max-width: var(--max-w);
+  margin: 48px auto;
+  padding: 24px;
+  color: var(--text);
+  font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  background: linear-gradient(180deg, rgba(255,255,255,0.01), transparent);
+  border-radius: 14px;
+  box-shadow: 0 10px 30px rgba(2,6,23,0.65);
+  border: 1px solid rgba(255,255,255,0.03);
 }
 
-.tag {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-left: 700px;
-  max-width: 300px;
-  padding-top: 10px;
+/* Top: cover + meta */
+.game-top {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 28px;
+  align-items: start;
 }
 
-.tags {
-  margin: 0;
-  font-size: 15px;
-  color: aliceblue;
+.cover-wrap {
+  width: 280px;              /* largura da coluna esquerda (ajuste se quiser maior) */
+  border-radius: 12px;
+  overflow: hidden;
 }
 
-.tagss {
-  font-size: 10px;
-  color: white;
+/* imagem passa a respeitar proporção vertical do cover */
+.cover-img {
+  width: 100%;
+  height: auto;              /* mantém a proporção real da imagem */
+  display: block;
+  object-fit: contain;       /* mostra a imagem inteira sem cortar */
+  aspect-ratio: 264 / 374;   /* aproxima a proporção do t_cover_big */
 }
 
-.avlctitulo {
-    color: white;
-    margin-left: 700px;
-    padding-top: 40px;
-}
-
-/* gráfico */
-.avaliacao {
-  font-family: Arial, sans-serif;
-  max-width: 300px;
-  margin-left: 100px;
-  text-align: center;
-  padding-top: 20px;
-}
-
-.chart-container {
-  display: flex;
-  justify-content: space-around;
-  align-items: flex-end;
-  height: 160px; /* espaço para labels */
-  border-left: 2px solid white;
-  border-bottom: 2px solid white;
-  
-  margin-bottom: 20px;
-  position: relative;
-}
-
-.bar-column {
+/* right column: title / meta */
+.meta {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  width: 60px;
-  position: relative;
-  overflow: visible;
-  cursor: default;
+  gap: 8px;
+  min-width: 0;
 }
-
-/* labels de meia nota (duas por coluna: top e bottom) */
-.half-label-top,
-.half-label-bottom,
-.label {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%) translateY(6px);
-  background: rgba(0,0,0,0.65);
-  color: #fff;
-  padding: 4px 6px;
-  border-radius: 6px;
-  font-size: 12px;
-  white-space: nowrap;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity .18s ease, transform .18s ease;
-  font-weight: 600;
-}
-
-/* posicionamento vertical das duas meia-notas */
-.half-label-top { top: -56px; }
-.half-label-bottom { top: -36px; }
-
-/* label da nota inteira (ex.: "5 ★") */
-.label { top: -16px; }
-
-/* mostra as labels ao passar o mouse na coluna */
-.bar-column:hover .half-label-top,
-.bar-column:hover .half-label-bottom,
-.bar-column:hover .label {
-  opacity: 1;
-  transform: translateX(-50%) translateY(0);
-}
-
-/* barra */
-.bar-fill {
-  width: 20px;
-  background: linear-gradient(180deg, #f39c12, #f1c40f);
-  border-radius: 6px 6px 0 0;
-  transition: height 0.6s ease, background-color 0.18s ease, filter 0.18s ease;
-  height: 0;
-  cursor: pointer;
-}
-
-/* hover visual da barra */
-.bar-fill:hover {
-  /* deixa a barra mais clara ao passar o mouse */
-  background: linear-gradient(180deg, #eda93c, #e7c643);
-  filter: brightness(0.98);
-}
-
-/* quantidade visível sempre */
-.count {
-  margin-top: 6px;
-  font-weight: bold;
-  font-size: 14px;
-  color: white;
-}
-
-/* removi a label fixa com estrela (ficará apenas no hover) */
-.label {
-  font-size: 14px;
-  color: white;
-}
-
-.rating-table {
-  position: absolute;
-  top: 110%;                    /* aparece logo abaixo da coluna */
-  left: 50%;
-  transform: translateX(-50%) translateY(8px);
-  min-width: 160px;
-  max-width: 260px;
-  background: rgba(10, 12, 14, 0.92);
-  border: 1px solid rgba(255,255,255,0.06);
-  border-radius: 10px;
-  padding: 10px;
-  color: #fff;
-  font-size: 13px;
-  line-height: 1.3;
-  box-shadow: 0 10px 24px rgba(0,0,0,0.6), 0 2px 6px rgba(0,0,0,0.25);
-  z-index: 60;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity .18s ease, transform .18s ease;
-  -webkit-backdrop-filter: blur(6px);
-  backdrop-filter: blur(6px);
-}
-
-/* Triângulo apontando para a coluna */
-.rating-table::before {
-  content: "";
-  position: absolute;
-  top: -8px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 0;
-  height: 0;
-  border-left: 8px solid transparent;
-  border-right: 8px solid transparent;
-  border-bottom: 8px solid rgba(10, 12, 14, 0.92);
-  z-index: 61;
-}
-
-/* Mostrar o box quando a coluna for hoverada */
-.bar-column:hover .rating-table,
-.bar-fill:hover ~ .rating-table {
-  opacity: 1;
-  transform: translateX(-50%) translateY(0);
-  pointer-events: auto;
-}
-
-/* Tabela interna */
-.rating-table table {
-  width: 100%;
-  border-collapse: collapse;
-  table-layout: auto;
-}
-
-.rating-table thead th {
-  text-align: left;
+.jogao {
+  margin: 0;
+  font-size: 26px;
   font-weight: 700;
+  color: var(--text);
+  letter-spacing: -0.2px;
+}
+.submeta {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  color: var(--muted);
+  font-size: 14px;
+}
+.descricao {
+  margin: 6px 0 0 0;
+  color: #cfe7ff;
+  line-height: 1.5;
+  max-width: 760px;
+  font-size: 15px;
+}
+
+/* tags/badges */
+.tag {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+  flex-wrap: wrap;
+}
+.tag .tags {
+  background: var(--panel);
+  padding: 6px 10px;
+  border-radius: 999px;
+  color: var(--muted);
   font-size: 13px;
-  padding-bottom: 6px;
-  color: #fff;
 }
 
-.rating-table tbody td {
-  padding: 6px 0;
-  color: #e6e6e6;
-  font-size: 13px;
-  vertical-align: middle;
-  border-bottom: 1px solid rgba(255,255,255,0.03);
-}
-
-/* destaque coluna esquerda (opcional) */
-.rating-table td:first-child {
-  color: #fff;
-  font-weight: 600;
-  width: 48%;
-}
-
-/* última linha sem borda */
-.rating-table tbody tr:last-child td {
-  border-bottom: none;
-}
-
-/* responsividade - reduz um pouco em telas pequenas */
-@media (max-width: 520px) {
-  .rating-table {
-    min-width: 140px;
-    max-width: 200px;
-    padding: 8px;
-    font-size: 12px;
-  }
-}
-
-/* custom scroll (WebKit) caso o conteúdo exceda a altura */
-.rating-table::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-.rating-table::-webkit-scrollbar-thumb {
-  background: rgba(255,255,255,0.07);
-  border-radius: 8px;
-}
-
-/*css para avaliar*/
+/* ações (botões) — colocadas logo abaixo da capa */
 .painel-acoes {
-  background: rgba(20, 20, 20, 0.8);
-  border: 1px solid rgba(255,255,255,0.1);
-  border-radius: 12px;
-  padding: 16px;
-  color: white;
-  max-width: 300px;
-  margin-left: 300px;
-  margin-top: 0%;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 8px;
 }
-
 .botoes-rapidos {
   display: flex;
+  gap: 8px;
   justify-content: space-between;
-  margin-bottom: 12px;
 }
-
 .acao {
-  background: #1f2937;
-  border: 1px solid rgba(255,255,255,0.2);
-  color: white;
-  padding: 8px 10px;
-  border-radius: 8px;
+  background: var(--btn-bg);
+  border: 1px solid var(--soft);
+  color: var(--text);
+  padding: 8px 12px;
+  border-radius: 10px;
   cursor: pointer;
+  font-weight: 600;
   font-size: 14px;
-  transition: 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: transform .08s ease, background .12s;
+}
+.acao:hover { transform: translateY(-2px); background: rgba(255,255,255,0.02); }
+
+/* avaliar (estrelas) */
+.avaliar { text-align: center; }
+.estrelas { display:flex; gap:6px; justify-content:center; margin-top:6px; }
+.estrelas span { font-size: 22px; cursor: pointer; color: #666; transition: color .15s; }
+.estrelas span.ativo, .estrelas span:hover { color: gold; }
+#nota-escolhida { margin-top: 6px; color: var(--muted); font-size: 13px; }
+
+/* avaliações - título e área do gráfico */
+.avlctitulo {
+  margin: 28px 0 12px 0;
+  font-size: 18px;
+  color: var(--text);
+  font-weight: 700;
 }
 
-.acao:hover {
-  background: #374151;
-}
-
-.avaliar {
-  text-align: center;
-}
-
-.estrelas span {
-  font-size: 26px;
-  cursor: pointer;
-  color: #555;
-  transition: color .2s;
-}
-
-.estrelas span:hover,
-.estrelas span.ativo {
-  color: gold;
-}
-
+/* area que contém o gráfico e (se necessário) outras métricas */
 .avaliacao-container {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 18px;
+  align-items: start;
+}
+
+/* gráfico principal (mantive estrutura) */
+.avaliacao {
+  background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.00));
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.03);
+}
+
+/* chart */
+.chart-container {
   display: flex;
-  gap: 30px;
-  align-items: flex-start;
+  gap: 6px;
+  justify-content: space-between;
+  align-items: flex-end;
+  height: 160px;
+  padding: 8px;
+  position: relative;
+}
+
+/* coluna do gráfico */
+.bar-column {
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  width: 38px;
+  position: relative;
+}
+.bar-fill {
+  width: 100%;
+  background: linear-gradient(180deg, #ffcd4d, #f39c12);
+  border-radius: 6px 6px 0 0;
+  transition: height 0.6s ease;
+  height: 0;
+}
+.rating-table {
+  position: absolute; top: calc(100% + 10px); left: 50%;
+  transform: translateX(-50%) translateY(6px);
+  min-width: 140px; background: rgba(8,10,12,0.95); color: #fff;
+  padding: 10px; border-radius: 8px; display:none; box-shadow: 0 8px 30px rgba(2,6,23,0.6);
+}
+.bar-column:hover .rating-table { display:block; }
+
+/* painel lateral de estatísticas (coluna direita da avaliacao-container) */
+.side-stats {
+  background: var(--card);
+  border-radius: 10px;
+  padding: 16px;
+  border: 1px solid var(--soft);
+}
+.side-stats h4 { margin: 0 0 10px 0; color: var(--muted); font-size: 14px; }
+.stat-row { display:flex; justify-content:space-between; margin-bottom:8px; color: #dfeffb; }
+
+/* responsividade */
+@media (max-width: 980px){
+  .game-top { grid-template-columns: 1fr; }
+  .avaliacao-container { grid-template-columns: 1fr; }
+  .cover-wrap { width: 100%; }
+  .left-col { width: auto; }
+}
+@media (max-width: 520px){
+  .jogao { font-size: 20px; }
+  .chart-container { height: 120px; }
+  .bar-column { width: 28px; }
 }
