@@ -2,7 +2,7 @@
 
 
 .navbar-light {
-    background-color: #FFF4E6 !important;
+    background-color: #fce7cd !important;
     color: #021E34 !important;
 }
 .btn-outline-dark {
@@ -54,9 +54,9 @@
 }
 
 body{
+        color: #F17A0D;
         background-color: rgb(0, 0, 22) !important; 
     }
-
 
 
 /* Footer */

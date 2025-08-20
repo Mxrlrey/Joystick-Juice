@@ -1,81 +1,106 @@
-/* container do carousel — permitir que os controles fiquem fora */
-#carouselExampleControls {
-  max-width: 1200px;
-  margin: 0 auto;
-  overflow: visible;           /* importante: antes era hidden */
-  position: relative;
-  padding: 0 56px;             /* espaço lateral para os botões externos */
-  box-shadow: 0 8px 28px rgba(0,0,0,.35);
-}
 
-/* imagens mantém comportamento */
-#carouselExampleControls img {
-  max-height: 374px;
-  object-fit: cover;
-}
-
-/* tamanho / estilo dos botões (fora do carousel) */
-#carouselExampleControls .carousel-control-prev,
-#carouselExampleControls .carousel-control-next {
-  width: 48px;
-  height: 48px;
-  border-radius: 10px;
-  background: rgba(0,0,0,0.55);
-  border: 0;
-  top: 50%;
-  transform: translateY(-50%);
-  position: absolute;
-  z-index: 30;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: transform .12s ease, background .12s ease;
-  box-shadow: 0 6px 18px rgba(2,6,23,0.45);
-}
-
-/* colocar fora: distância negativa em relação ao conteúdo */
-#carouselExampleControls .carousel-control-prev {
-  left: -56px;   /* ajusta para posicionar fora à esquerda */
-}
-#carouselExampleControls .carousel-control-next {
-  right: -56px;  /* ajusta para posicionar fora à direita */
-}
-
-/* melhora visual do ícone (mantém o ícone padrão do Bootstrap centrado) */
-#carouselExampleControls .carousel-control-prev-icon,
-#carouselExampleControls .carousel-control-next-icon {
-  background-size: 20px 20px;
-  filter: drop-shadow(0 4px 8px rgba(0,0,0,0.6));
-}
-
-/* hover */
-#carouselExampleControls .carousel-control-prev:hover,
-#carouselExampleControls .carousel-control-next:hover {
-  transform: translateY(-50%) scale(1.03);
-  background: rgba(0,0,0,0.65);
-}
-
-/* se o layout tiver bordas arredondadas, evita que o botão "corte" visualmente */
-#carouselExampleControls .carousel-inner {
-  border-radius: 8px;
-  overflow: hidden;
-}
-
-/* Responsivo: em telas pequenas reposiciona os botões para dentro do carousel (evita overflow na tela) */
-@media (max-width: 720px) {
-  #carouselExampleControls {
-    padding: 0 12px;
+  /* Container do carrossel com variável para espaço dos indicators */
+  .card-carousel {
+    --indicator-space: 64px; /* ajuste único: muda o espaço reservado em baixo */
+    position: relative;
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 0 50px var(--indicator-space); /* padding-bottom reservado para as bolinhas */
+    overflow: hidden;
   }
-  #carouselExampleControls .carousel-control-prev {
-    left: 8px;
+
+  /* Track rolável */
+  .carousel-track {
+    display: flex;
+    gap: 15px;
+    transition: transform 0.5s ease-in-out;
   }
-  #carouselExampleControls .carousel-control-next {
-    right: 8px;
+
+  /* Card individual */
+  .card {
+    flex: 0 0 calc((100% - 5 * 15px) / 6);
+    background: transparent;
+    border-radius: 0;
+    overflow: hidden;
   }
-  #carouselExampleControls .carousel-control-prev,
-  #carouselExampleControls .carousel-control-next {
+
+  .card img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    display: block;
+  }
+
+  /* Botões de navegação: compensam o padding reservado para não descerem */
+  .carousel-btn {
+    position: absolute;
+    top: calc(50% - (var(--indicator-space) / 2)); /* mantém as setas visualmente na altura das capas */
+    transform: translateY(-50%);
     width: 40px;
     height: 40px;
-    border-radius: 8px;
+    background: #F17A0D;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 12; /* acima das bolinhas e das capas */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    color: #fff;
+    font-weight: bold;
+    box-shadow: 0 4px 15px rgba(255, 193, 100, 0.699);
+    transition: all 0.2s ease;
   }
-}
+  .carousel-btn:hover { transform: translateY(-50%) scale(1.1); }
+  .carousel-btn.prev { left: 0; }
+  .carousel-btn.next { right: 0; }
+  .carousel-btn.hidden { opacity: 0.3; pointer-events: none; }
+
+  .carousel-indicators {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 12px;            /* ajuste vertical (mude para 6px/8px se quiser mais colado) */
+    display: flex;
+    gap: 10px;
+    padding: 0;              /* remove padding que deslocava o bloco */
+    margin: 0;
+    width: auto;             /* evita largura grande que puxa para a direita */
+    justify-content: center;
+    box-sizing: border-box;
+    z-index: 8;
+    pointer-events: auto;
+  }
+
+  /* estilo das bolinhas (era esse que estava faltando) */
+  .indicator {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: rgba(255,255,255,0.3);
+    cursor: pointer;
+    transition: transform 0.18s ease, background-color 0.18s ease, box-shadow 0.18s ease;
+  }
+  .indicator.active {
+    background-color: #F17A0D;
+    transform: scale(1.3);
+    box-shadow: 0 0 10px rgba(255, 193, 100, 0.699);
+  }
+
+  .title{
+   
+  }
+
+  /* Responsividade */
+  @media (max-width: 1100px) { .card { flex: 0 0 calc((100% - 3 * 15px)/4); } }
+  @media (max-width: 800px)  { .card { flex: 0 0 calc((100% - 2 * 15px)/3); } }
+  @media (max-width: 600px)  { .card { flex: 0 0 calc((100% - 1 * 15px)/2); } }
+  @media (max-width: 400px)  { .card { flex: 0 0 100%; } }
+
+  /* reduz variável e padding em telas muito pequenas */
+  @media (max-width: 500px) {
+    .card-carousel { --indicator-space: 56px; padding-bottom: var(--indicator-space); }
+    .carousel-indicators { padding: 0 20px; bottom: 10px; }
+    .carousel-btn { top: calc(50% - (var(--indicator-space) / 2)); }
+  }
