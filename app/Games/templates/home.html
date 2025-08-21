@@ -8,7 +8,27 @@
 {% block title %}Início - Joystick Juice{% endblock %}
 
 {% block content %}
-<h1 class="title">Todos os Jogos Cadastrados</h1>
+<h2 class="title">Mais Curtidos</h2>
+
+<div class="card-carousel">
+  <button class="carousel-btn prev hidden" id="prevBtn">&#8249;</button>
+
+  <div class="carousel-track" id="carouselTrack">
+    {% for game in games %}
+      <div class="card">
+        <a href="{% url 'games' game.pk %}">
+          <img src="{{ game.cover_url }}" alt="{{ game.title }}">
+        </a>
+      </div>
+    {% endfor %}
+  </div>
+
+  <button class="carousel-btn next" id="nextBtn">&#8250;</button>
+
+  <div class="carousel-indicators" id="carouselIndicators"></div>
+</div>
+
+<h2 class="title">Mais jogados</h2>
 
 <div class="card-carousel">
   <button class="carousel-btn prev hidden" id="prevBtn">&#8249;</button>
@@ -29,17 +49,17 @@
 </div>
 
 <script>
-  const carouselTrack = document.getElementById('carouselTrack');
-  const prevBtn = document.getElementById('prevBtn');
-  const nextBtn = document.getElementById('nextBtn');
-  const carouselIndicators = document.getElementById('carouselIndicators');
-
-  // sempre pega a lista atual de cards (útil se o DOM mudar)
-  const getCards = () => carouselTrack ? carouselTrack.querySelectorAll('.card') : [];
+function initCarousel(carousel) {
+  const track = carousel.querySelector('.carousel-track');
+  const prevBtn = carousel.querySelector('.prev');
+  const nextBtn = carousel.querySelector('.next');
+  const indicatorsContainer = carousel.querySelector('.carousel-indicators');
 
   let cardsPerView = 6;
   let currentPosition = 0;
   let totalSlides = 0;
+
+  const getCards = () => track ? track.querySelectorAll('.card') : [];
 
   function updateCardsPerView() {
     const width = window.innerWidth;
@@ -52,19 +72,18 @@
     const count = getCards().length;
     totalSlides = Math.max(1, Math.ceil(count / cardsPerView));
 
-    // ajusta posição corrente caso fora do range
     if (currentPosition >= totalSlides) currentPosition = totalSlides - 1;
     if (currentPosition < 0) currentPosition = 0;
   }
 
   function initIndicators() {
-    carouselIndicators.innerHTML = '';
+    indicatorsContainer.innerHTML = '';
     for (let i = 0; i < totalSlides; i++) {
       const indicator = document.createElement('div');
       indicator.className = 'indicator';
       if (i === currentPosition) indicator.classList.add('active');
       indicator.addEventListener('click', () => goToSlide(i));
-      carouselIndicators.appendChild(indicator);
+      indicatorsContainer.appendChild(indicator);
     }
   }
 
@@ -74,11 +93,10 @@
 
     const cardWidth = cards[0].offsetWidth;
     const gap = 15;
-    // mover por "páginas" correspondentes ao cardsPerView
     const translateX = -currentPosition * (cardWidth + gap) * cardsPerView;
-    carouselTrack.style.transform = `translateX(${translateX}px)`;
+    track.style.transform = `translateX(${translateX}px)`;
 
-    const indicators = carouselIndicators.querySelectorAll('.indicator');
+    const indicators = indicatorsContainer.querySelectorAll('.indicator');
     indicators.forEach((ind, i) => {
       ind.classList.toggle('active', i === currentPosition);
     });
@@ -106,14 +124,21 @@
     updateCarousel();
   }
 
+  // eventos
   window.addEventListener('resize', handleResize);
   nextBtn.addEventListener('click', goToNextSlide);
   prevBtn.addEventListener('click', goToPrevSlide);
 
-  window.addEventListener('load', () => {
-    updateCardsPerView();
-    initIndicators();
-    updateCarousel();
-  });
+  // inicialização
+  updateCardsPerView();
+  initIndicators();
+  updateCarousel();
+}
+
+// Inicializa todos os carrosséis da página
+window.addEventListener('load', () => {
+  document.querySelectorAll('.card-carousel').forEach(initCarousel);
+});
 </script>
+
 {% endblock %}

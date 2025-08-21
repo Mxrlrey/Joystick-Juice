@@ -60,8 +60,26 @@
                 </li>
             </ul>
             <form class="d-flex">
-                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                <button class="btn btn-outline-dark me-5" type="submit">Search</button>
+                
+                <div class="input-group me-5">
+                  <input type="search" class="form-control input" placeholder="Buscar" aria-label="Buscar">
+                  <button class="btn btn-dark" type="submit">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                      <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001l3.85 3.85a1 1 0 0 0 
+                              1.415-1.414l-3.85-3.85zm-5.242.656a5 5 0 1 1 
+                              0-10 5 5 0 0 1 0 10z"/>
+                    </svg>
+                  </button>
+                </div>
+                {% if request.user.is_authenticated and request.user.avatar %}
+                  <a href="{% url 'user_profile' request.user.pk %}">
+                    <img src="{{ request.user.avatar.url }}" alt="{{ request.user.username }}" class="navbar-avatar">
+                  </a>
+                {% endif %}
+                <button class="btn btn-outline-danger me-5" id="logout-link">
+                  Sair
+                </button>
+
             </form>
           </div>
       </div>
@@ -73,7 +91,7 @@
     {% endblock %}
     </main>
 
-    <footer class="site-footer">
+    <footer class="site-footer mt-auto">
       <div class="container text-center">
         <div class="footer-top d-flex flex-column flex-lg-row justify-content-center align-items-center gap-3">
           <a class="footer-brand d-flex align-items-center" href="#">
@@ -108,5 +126,16 @@
       </div>
     </footer>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    <script>
+      document.getElementById("logout-link").addEventListener("click", function(e){
+          e.preventDefault();
+          fetch("{% url 'user_logout' %}", {
+              method: "POST",
+              headers: {
+                  "X-CSRFToken": "{{ csrf_token }}",
+              },
+          }).then(() => window.location.href = "{% url 'user_login' %}");
+      });
+    </script>
   </body>
 </html>

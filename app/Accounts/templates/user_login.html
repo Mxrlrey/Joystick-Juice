@@ -1,7 +1,14 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Login- Joystick Juice{% endblock %}
+
+{% block content %}
 <h2>Login</h2>
-<form method="post">
+<form method="post" class="form-control">
     {% csrf_token %}
-    <input type="text" name="username" placeholder="Usuário" required>
-    <input type="password" name="password" placeholder="Senha" required>
-    <button type="submit">Entrar</button>
+    <input type="text"  class="form-control" name="username" placeholder="Usuário" required>
+    <input type="password" class="form-control" name="password" placeholder="Senha" required>
+    <button type="submit" class="btn btn-primary">Entrar</button>
 </form>
+{% endblock %}

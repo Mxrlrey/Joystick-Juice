@@ -1,13 +1,21 @@
 /* Header */
-
+.input{
+    border-radius: 50px;
+}
 
 .navbar-light {
     background-color: #fce7cd !important;
     color: #021E34 !important;
 }
+
 .btn-outline-dark {
     border: 2px solid;
 }
+
+.btn-outline-danger {
+    border: 2px solid;
+}
+
 .navbar-light .navbar-nav .nav-link {
     color: #021E34!important;
     transition: background-color 0.3s ease, color 0.3s ease; 
@@ -54,29 +62,48 @@
 }
 
 body{
-        color: #F17A0D;
-        background-color: rgb(0, 0, 22) !important; 
-    }
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 100vh;
+    color: #F17A0D;
+    background-color: rgb(0, 0, 22) !important; 
+}
 
+.navbar .navbar-avatar {
+    width: 50px !important;
+    height: 50px !important;
+    border-radius: 50% !important;
+    object-fit: cover !important;
+    border: 2px solid #F17A0D !important;
+    margin-right: 8px !important;
+    vertical-align: middle !important;
+    transition: transform 0.2s !important;
+}
 
+.navbar .navbar-avatar:hover {
+    transform: scale(1.2) !important;
+}
 /* Footer */
 
 
 .site-footer {
-  background-color: rgb(0, 0, 22);
-  color: #FFF4E6;                 
-  padding: 2rem 0;
-  border-top: 1px solid rgba(255,255,255,0.03);
-  font-size: 0.95rem;
+    align-self: flex-end;
+    background-color: rgb(0, 0, 22);
+    color: #FFF4E6;                 
+    padding: 2rem 0;
+    border-top: 1px solid rgba(255,255,255,0.03);
+    font-size: 0.95rem;
+    width: 100%;
 }
 
 .site-footer .footer-title {
-  color: #FFF4E6;
-  font-family: 'Press Start 2P', cursive; 
-  font-size: 1rem;
-  display: inline-block;
-  transform: scaleX(0.9) scaleY(1.15); 
-  letter-spacing: -1px;
+    color: #FFF4E6;
+    font-family: 'Press Start 2P', cursive; 
+    font-size: 1rem;
+    display: inline-block;
+    transform: scaleX(0.9) scaleY(1.15); 
+    letter-spacing: -1px;
 }
 
 .site-footer .footer-links .list-inline-item {
