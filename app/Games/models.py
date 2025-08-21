@@ -8,6 +8,8 @@ class Game(models.Model):
     synopsis = models.TextField()
     developer = models.CharField(max_length=100)
     cover_url = models.URLField(max_length=200, blank=True, null=True)
+    banner_url = models.URLField(max_length=200, blank=True, null=True)   # novo
+    trailer_url = models.URLField(max_length=200, blank=True, null=True)
 
 class UserGameList(models.Model):
     STATUS_CHOICES = [

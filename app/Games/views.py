@@ -45,7 +45,7 @@ def preencher_e_salvar(request):
         # Ajustar campos para buscar gênero, desenvolvedor, etc
         body = f'''
             search "{nome_jogo}";
-            fields name, genres.name, first_release_date, summary, involved_companies.company.name, cover.url;
+            fields name, genres.name, first_release_date, summary, involved_companies.company.name, cover.url, artworks.url, videos.video_id;
             limit 1;
         '''
         resp = requests.post("https://api.igdb.com/v4/games", headers=headers, data=body)
@@ -91,6 +91,27 @@ def preencher_e_salvar(request):
             if capa_url:
                 capa_url = capa_url.replace("t_thumb", "t_cover_big")
 
+            # Banner / artwork (pegar o primeiro, se existir)
+            banner_url = ""
+            if "artworks" in jogo and jogo["artworks"]:
+                try:
+                    banner_url = jogo["artworks"][0]["url"]
+                    if banner_url.startswith("//"):
+                        banner_url = "https:" + banner_url
+                    banner_url = banner_url.replace("t_thumb", "t_1080p")  # maior resolução
+                except (TypeError, KeyError):
+                    banner_url = ""
+
+            # Trailer (YouTube)
+            trailer_url = ""
+            if "videos" in jogo and jogo["videos"]:
+                try:
+                    video_id = jogo["videos"][0]["video_id"]
+                    trailer_url = f"https://www.youtube.com/embed/{video_id}"  # link embed
+                except (TypeError, KeyError):
+                    trailer_url = ""
+
+
 
             # Criar o objeto Game
             Game.objects.create(
@@ -99,7 +120,9 @@ def preencher_e_salvar(request):
                 release_date=data_lanc or datetime.today().date(),
                 synopsis=jogo.get("summary", ""),
                 developer=desenvolvedor or "Desconhecido",
-                cover_url=capa_url
+                cover_url=capa_url,
+                banner_url=banner_url,
+                trailer_url=trailer_url
             )
         return redirect("listar_jogos")
 

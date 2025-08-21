@@ -41,6 +41,21 @@
     <!-- coluna direita: título, descrição, tags -->
     <div class="meta right-col">
       <h1 class="jogao">{{ object.title }}</h1>
+
+      {% if object.trailer_url %}
+      <div class="game-trailer my-4">
+    
+        <div class="video-wrap" style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;">
+          <iframe src="{{ object.trailer_url }}" 
+                  title="Trailer de {{ object.title }}" 
+                  style="position:absolute;top:0;left:0;width:100%;height:100%;border:0;" 
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                  allowfullscreen>
+          </iframe>
+        </div>
+      </div>
+      {% endif %}
+
       <div class="submeta">
         <span class="tags">Gênero: {{ object.genre }}</span>
         <span class="tags">Lançamento: {{ object.release_date }}</span>
