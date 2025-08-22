@@ -247,3 +247,108 @@
         font-size: 36px;
       }
     }
+
+    .stats-activities {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+    }
+
+    .game-stats {
+      padding-right: 20px;
+      border-right: 3px solid #F17A0D;
+    }
+
+    .user-activities {
+      padding-left: 20px;
+    }
+
+    .user-activities h3 {
+      color: #F17A0D;
+      font-weight: bold;
+    }
+
+    .stat-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      font-size: 14px;
+    }
+
+    .stat-list li {
+      margin: 6px 0;
+    }
+
+    .stat-list a {
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .stat-list a:hover .label {
+      color: #ff9a45;
+      text-decoration: underline;
+    }
+
+    .dot {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+
+    .dot.jogando { background: #2ecc71; }
+    .dot.concluido { background: #3498db; }
+    .dot.abandonado { background: #e74c3c; }
+    .dot.para_jogar { background: #f1c40f; }
+
+    .label {
+      color: #F17A0D;
+      font-weight: 600;
+    }
+
+    .count {
+      color: #fff;
+      font-weight: bold;
+    }
+
+    .activity-links {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .activity-links li {
+      margin: 10px 0;
+    }
+
+    .activity-links a {
+      text-decoration: none;
+      display: flex;
+      gap: 6px;
+    }
+
+    .activity-links a:hover .label {
+      color: #ff9a45;
+      text-decoration: underline;
+    }
+
+    @media (max-width: 768px) {
+      .stats-activities {
+        grid-template-columns: 1fr;
+      }
+
+      .game-stats {
+        border-right: none;
+        padding-right: 0;
+        border-bottom: 3px solid #F17A0D;
+        padding-bottom: 20px;
+        margin-bottom: 20px;
+      }
+
+      .user-activities {
+        padding-left: 0;
+      }
+    }
+

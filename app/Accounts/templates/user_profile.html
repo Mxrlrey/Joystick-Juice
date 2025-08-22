@@ -116,4 +116,67 @@
         </div>
       </div>
     </div>
+
+    <div class="bio-section">
+      <div class="stats-activities">
+        <div class="game-stats">
+          <h3 class="mb-3">Game Stats</h3>
+          <ul class="stat-list">
+            <li>
+              <a href="{% url 'user_game_list' object.pk 'J' %}">
+                <span class="dot jogando"></span>
+                <span class="label">Jogando:</span>
+                <span class="count">{{ stats.jogando }}</span>
+              </a>
+            </li>
+            <li>
+              <a href="{% url 'user_game_list' object.pk 'C' %}">
+                <span class="dot concluido"></span>
+                <span class="label">Concluído:</span>
+                <span class="count">{{ stats.concluido }}</span>
+              </a>
+            </li>
+            <li>
+              <a href="{% url 'user_game_list' object.pk 'A' %}">
+                <span class="dot abandonado"></span>
+                <span class="label">Abandonado:</span>
+                <span class="count">{{ stats.abandonado }}</span>
+              </a>
+            </li>
+            <li>
+              <a href="{% url 'user_game_list' object.pk 'P' %}">
+                <span class="dot para_jogar"></span>
+                <span class="label">Para Jogar:</span>
+                <span class="count">{{ stats.para_jogar }}</span>
+              </a>
+            </li>
+            <li>
+              <a href="{% url 'user_game_list' object.pk 'T' %}">
+                <span class="label">Total:</span>
+                <span class="count">{{ stats.total }}</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <div class="user-activities">
+          <h3>Atividades</h3>
+          <ul class="activity-links">
+            <li>
+              <a href="{% url 'user_reviews' object.pk %}">
+                <span class="label">Reviews</span>
+                <span class="count">{{ reviews_count }}</span>
+              </a>
+            </li>
+            <li>
+              <a href="{% url 'user_comments' object.pk %}">
+                <span class="label">Comentários</span>
+                <span class="count">{{ comments_count }}</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
 {% endblock %}
