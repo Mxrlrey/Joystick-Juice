@@ -5,47 +5,44 @@
 {% block content %}
 <h1>Lista de users</h1>
 
-
-<table class="table">
+<table class="table text-light">
     <thead>
-        <tr>
-        <th scope="col">id</th>
-        <th scope="col">nome</th>
-        <th scope="col">email</th>
-        <th scope="col">username</th>
-        <th scope="col">ações</th>
+        <tr class="bg-primary border-2">
+        <th scope="col">Id</th>
+        <th scope="col">Nome</th>
+        <th scope="col">Email</th>
+        <th scope="col">Username</th>
+        <th scope="col"></th>
         </tr>
     </thead>
     <tbody>
         {% for user in users %} 
             <tr>
-                <th scope="row">{{ user.pk}}</th>
+                <td>{{ user.pk}}</th>
                 <td>{{ user.name }}</td>
                 <td>{{ user.email }}</td>
                 <td>{{ user.username }}</td>
                 <td>
-                    
-                        <div class="modal" id="updateModal{{ user.pk }}" tabindex="-1" aria-labelledby="updateModalLabel{{ user.pk }}" aria-hidden="true">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <form method="POST" action="{% url 'user_update' user.pk %}">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title">Modal title</h5>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                        </div>
-                                        <div class="modal-body">
-                                            {% csrf_token %}
-                                            {{ user.update_form.as_p }}
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                                            <button type="submit" class="btn btn-primary">Salvar</button>
-                                        </div>
-                                    </form>
-                                </div>
+                    <div class="modal" id="updateModal{{ user.pk }}" tabindex="-1" aria-labelledby="updateModalLabel{{ user.pk }}" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <form method="POST" action="{% url 'user_update' user.pk %}">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Modal title</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        {% csrf_token %}
+                                        {{ user.update_form.as_p }}
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                        <button type="submit" class="btn btn-primary">Salvar</button>
+                                    </div>
+                                </form>
                             </div>
                         </div>
-    
+                    </div>
                     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#updateModal{{ user.pk }}">Atualizar</button>
                     <form action="{% url 'user_delete' user.pk %}" method="post" style="display:inline;">
                         {% csrf_token %}

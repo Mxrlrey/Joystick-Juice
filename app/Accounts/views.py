@@ -60,15 +60,15 @@ class UserDeleteView(DeleteView):
 class UserUpdateView(UpdateView):
     model = User
     form_class = forms.UserFormUpdate
-    success_url = reverse_lazy('user_list')
+    
+    def get_success_url(self): 
+        return reverse_lazy('user_profile', kwargs={'pk': self.object.pk})
 
 @method_decorator(never_cache, name='dispatch')
 class UpdateBioView(LoginRequiredMixin, UpdateView):
     model= User
     fields = ['bio']
-    template_name = 'user_bio.html'
     login_url = reverse_lazy('user_login')
-
 
     def get_success_url(self): 
         return reverse_lazy('user_profile', kwargs={'pk': self.object.pk})
@@ -79,5 +79,10 @@ class PerfilUserView(LoginRequiredMixin, DetailView):
     template_name = 'user_profile.html'
     login_url = reverse_lazy('user_login')
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['update_form'] = forms.UserFormUpdate(instance=self.object)
+        context['bio_form'] = forms.UserFormBio(instance=self.object)
+        return context
 
 

@@ -29,19 +29,25 @@ class RegisterForm(UserCreationForm):
         self.fields['password2'].widget = forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Digite sua senha novamente'})
 
 class UserFormUpdate(forms.ModelForm):
-    avatar = forms.ImageField(widget=CustomClearableFileInput, required=False)
     class Meta:
         model = User
-        fields = ['name','username', 'email', 'birthdate', 'gender', 'avatar']
+        fields = ['name','username', 'email', 'birthdate', 'gender']
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Nome completo'}),
             'username': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Nome de usuário'}),
             'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'E-mail'}),
             'birthdate': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'},format='%Y-%m-%d' ),
             'gender': forms.Select(attrs={'class': 'form-control'}),
-            'avatar': forms.ClearableFileInput(attrs={'class': 'form-control'}),
         }
         help_texts = {
             'username': '', 
             'email': '',
+        }
+
+class UserFormBio(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['bio']
+        widgets = {
+            'bio': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Bio'})
         }
