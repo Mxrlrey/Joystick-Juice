@@ -1,8 +1,13 @@
 import requests
 from datetime import datetime
 from django.views.generic import CreateView, ListView, DeleteView, UpdateView, DetailView
-from django.shortcuts import render, redirect
+
 from .models import Game
+
+from django.shortcuts import render, get_object_or_404, redirect
+from Reviews.models import Review, Comment
+from Reviews.forms import CommentForm
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 def home(request):
@@ -127,3 +132,30 @@ def preencher_e_salvar(request):
         return redirect("listar_jogos")
 
     return render(request, "preencher.html")
+
+def game_detail(request, game_id):
+    # pega o game
+    game = get_object_or_404(Game, pk=game_id)
+
+    # pega todas as reviews do game
+    reviews = Review.objects.filter(game=game).order_by('-reviewID')
+
+    # comentário novo
+    if request.method == 'POST':
+        form = CommentForm(request.POST)
+        review_id = request.POST.get('review_id')
+        review = get_object_or_404(Review, pk=review_id)
+        if form.is_valid() and request.user.is_authenticated:
+            comment = form.save(commit=False)
+            comment.user = request.user
+            comment.review = review
+            comment.save()
+            return redirect('game_detail', game_id=game_id)
+    else:
+        form = CommentForm()
+
+    return render(request, 'games/game_detail.html', {
+        'object': game,
+        'reviews': reviews,
+        'form': form
+    })

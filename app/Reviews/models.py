@@ -14,7 +14,7 @@ class likeReview(models.Model):
     
 class Comment(models.Model):
     commentID = models.AutoField(primary_key=True)
-    opnion = models.TextField(max_length=500)
+    opinion = models.TextField(max_length=500)
     user = models.ForeignKey('Accounts.User', on_delete=models.CASCADE, related_name='comments')
     review = models.ForeignKey(Review, on_delete=models.CASCADE, related_name='comments')
 

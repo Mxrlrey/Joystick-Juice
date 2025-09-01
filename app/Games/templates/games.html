@@ -90,6 +90,32 @@
     </aside>
   </div>
 
+ <h2>Comentários</h2>
+
+{% for review in reviews %}
+    <h4>Comentários da review #{{ review.reviewID }}</h4>
+
+    {% if review.comments.all %}
+        {% for comment in review.comments.all %}
+            <p><strong>{{ comment.user.username }}</strong>: {{ comment.opinion }}</p>
+        {% endfor %}
+    {% else %}
+        <p>Seja o primeiro a comentar!</p>
+    {% endif %}
+
+    {% if user.is_authenticated %}
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="hidden" name="review_id" value="{{ review.pk }}">
+        <button type="submit">Comentar</button>
+    </form>
+    {% else %}
+        <p><em>Faça login para comentar.</em></p>
+    {% endif %}
+
+{% endfor %}
+
 </div>
 
 <script>
