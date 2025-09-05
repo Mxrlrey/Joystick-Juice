@@ -3,107 +3,141 @@
 <!doctype html>
 <html lang="en">
   <head>
+    <!-- ===============================
+         Metadados e Responsividade
+         =============================== -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- ===============================
+         Fonts e CSS Externo
+         =============================== -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     <link href="{% static 'css/style.css' %}" rel="stylesheet">
     {% block css %}{% endblock %}
+
+    <!-- ===============================
+         Título da Página
+         =============================== -->
     <title>{% block title %}Joystick Juice{% endblock %}</title>
   </head>
-  <body>  
-    <nav class="navbar navbar-expand-lg navbar-light bg-primary">
-      <div class="container-fluid">
-          <a class="navbar-brand d-flex align-items-center ms-5"  href="#">
-            <img class="me-0"src="{% static 'img/global/logo.png' %}" alt="Joystick Juice" class="me-2" style="height:60px; width:auto;">
-            <h1 class="achatar">Joystick-Juice</h1>
-          </a>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse ms-4 mt-3" id="navbarSupportedContent">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item">
-                  <a class="nav-link" aria-current="page" href="{% url 'home'%}">Início</a>
-                </li>
-                <li class="nav-item dropdown">
-                  <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                      Games
-                  </a>
-                  <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <li><a class="dropdown-item" href="#">Ação</a></li>
-                    <li><a class="dropdown-item" href="#">Aventura</a></li>
-                    <li><a class="dropdown-item" href="#">Battle Royale</a></li>
-                    <li><a class="dropdown-item" href="#">Cartas (Card Game)</a></li>
-                    <li><a class="dropdown-item" href="#">Corrida (Racing)</a></li>
-                    <li><a class="dropdown-item" href="#">Esporte</a></li>
-                    <li><a class="dropdown-item" href="#">Estratégia em Tempo Real (RTS)</a></li>
-                    <li><a class="dropdown-item" href="#">Estratégia por Turnos (TBS)</a></li>
-                    <li><a class="dropdown-item" href="#">FPS (First Person Shooter)</a></li>
-                    <li><a class="dropdown-item" href="#">Indie</a></li>
-                    <li><a class="dropdown-item" href="#">MMORPG</a></li>
-                    <li><a class="dropdown-item" href="#">MOBA (Multiplayer Online Battle Arena)</a></li>
-                    <li><a class="dropdown-item" href="#">Plataforma (Platformer)</a></li>
-                    <li><a class="dropdown-item" href="#">Puzzle</a></li>
-                    <li><a class="dropdown-item" href="#">RPG (Role-Playing Game)</a></li>
-                    <li><a class="dropdown-item" href="#">Simulação (Simulation)</a></li>
-                    <li><a class="dropdown-item" href="#">Survival</a></li>
-                    <li><a class="dropdown-item" href="#">Terror (Horror)</a></li>
-                    <li><a class="dropdown-item" href="#">Visual Novel</a></li>
-                  </ul>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link">Reviews</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="#">Meus Favoritos</a>
-                </li>
-            </ul>
-            <form class="d-flex">
-                
-                <div class="input-group me-5">
-                  <input type="search" class="form-control input" placeholder="Buscar" aria-label="Buscar">
-                  <button class="btn btn-dark" type="submit">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                      <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001l3.85 3.85a1 1 0 0 0 
-                              1.415-1.414l-3.85-3.85zm-5.242.656a5 5 0 1 1 
-                              0-10 5 5 0 0 1 0 10z"/>
-                    </svg>
-                  </button>
-                </div>
-                {% if request.user.is_authenticated and request.user.avatar %}
-                  <a href="{% url 'user_profile' request.user.pk %}">
-                    <img src="{{ request.user.avatar.url }}" alt="{{ request.user.username }}" class="navbar-avatar">
-                  </a>
-                {% endif %}
-                <button class="btn btn-outline-danger" id="logout-link">
-                  Sair
-                </button>
 
-            </form>
-          </div>
+  <body>
+    <!-- ===============================
+         Navbar Principal
+         =============================== -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-primary">
+      <div class="container-fluid align-items-center">
+
+        <!-- Logo e Nome do Site -->
+        <a class="navbar-brand d-flex align-items-center ms-5" href="{% url 'home'%}">
+          <img src="{% static 'img/global/logo.png' %}" alt="Joystick Juice" class="me-2 navbar-logo">
+          <h1 class="achatar mb-0">Joystick-Juice</h1>
+        </a>
+
+        <!-- Botão de Toggle para Mobile -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Links de Navegação, Barra de Pesquisa, Avatar e Logout -->
+        <div class="collapse navbar-collapse ms-4" id="navbarSupportedContent">
+
+          <!-- Links do Menu -->
+          <ul class="navbar-nav me-auto mb-0">
+            <li class="nav-item">
+              <a class="nav-link" aria-current="page" href="{% url 'home'%}">Início</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Games</a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a class="dropdown-item" href="#">Ação</a></li>
+                <li><a class="dropdown-item" href="#">Aventura</a></li>
+                <li><a class="dropdown-item" href="#">Battle Royale</a></li>
+                <li><a class="dropdown-item" href="#">Cartas (Card Game)</a></li>
+                <li><a class="dropdown-item" href="#">Corrida (Racing)</a></li>
+                <li><a class="dropdown-item" href="#">Esporte</a></li>
+                <li><a class="dropdown-item" href="#">Estratégia em Tempo Real (RTS)</a></li>
+                <li><a class="dropdown-item" href="#">Estratégia por Turnos (TBS)</a></li>
+                <li><a class="dropdown-item" href="#">FPS (First Person Shooter)</a></li>
+                <li><a class="dropdown-item" href="#">Indie</a></li>
+                <li><a class="dropdown-item" href="#">MMORPG</a></li>
+                <li><a class="dropdown-item" href="#">MOBA (Multiplayer Online Battle Arena)</a></li>
+                <li><a class="dropdown-item" href="#">Plataforma (Platformer)</a></li>
+                <li><a class="dropdown-item" href="#">Puzzle</a></li>
+                <li><a class="dropdown-item" href="#">RPG (Role-Playing Game)</a></li>
+                <li><a class="dropdown-item" href="#">Simulação (Simulation)</a></li>
+                <li><a class="dropdown-item" href="#">Survival</a></li>
+                <li><a class="dropdown-item" href="#">Terror (Horror)</a></li>
+                <li><a class="dropdown-item" href="#">Visual Novel</a></li>
+              </ul>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link">Reviews</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Meus Favoritos</a>
+            </li>
+          </ul>
+
+          <!-- Formulário de Busca + Avatar + Logout -->
+          <form class="d-flex align-items-center">
+
+            <!-- Barra de Pesquisa -->
+            <div class="input-group me-3">
+              <input type="search" class="form-control input" placeholder="Buscar" aria-label="Buscar">
+              <button class="btn btn-dark" type="submit">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                  <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001l3.85 3.85a1 1 0 0 0
+                          1.415-1.414l-3.85-3.85zm-5.242.656a5 5 0 1 1
+                          0-10 5 5 0 0 1 0 10z"/>
+                </svg>
+              </button>
+            </div>
+
+            <!-- Avatar do Usuário -->
+            {% if request.user.is_authenticated and request.user.avatar %}
+              <a href="{% url 'user_profile' request.user.pk %}">
+                <img src="{{ request.user.avatar.url }}" alt="{{ request.user.username }}" class="navbar-avatar me-2">
+              </a>
+            {% endif %}
+
+            <!-- Botão Logout -->
+            <button class="btn btn-outline-danger" id="logout-link">Sair</button>
+
+          </form>
+        </div>
       </div>
     </nav>
 
+    <!-- ===============================
+         Conteúdo Principal
+         =============================== -->
     <main class="container my-5">
-    {% block content %}
-    <!-- Conteúdo das páginas filhas entra aqui -->
-    {% endblock %}
+      {% block content %}{% endblock %}
     </main>
 
+    <!-- ===============================
+         Footer
+         =============================== -->
     <footer class="site-footer mt-auto">
       <div class="container text-center">
+
+        <!-- Logo, Links e Redes Sociais -->
         <div class="footer-top d-flex flex-column flex-lg-row justify-content-center align-items-center gap-3">
           <a class="footer-brand d-flex align-items-center" href="#">
             <img src="{% static 'img/global/logo.png' %}" alt="Joystick Juice" style="height:48px; width:auto;">
             <span class="ms-2 achatar footer-title">Joystick-Juice</span>
           </a>
+
           <ul class="list-inline mb-0 footer-links">
             <li class="list-inline-item"><a href="#">Sobre</a></li>
             <li class="list-inline-item"><a href="#">Reviews</a></li>
             <li class="list-inline-item"><a href="#">Categorias</a></li>
             <li class="list-inline-item"><a href="#">Contato</a></li>
           </ul>
+
           <div class="footer-social">
             <a class="social-link" href="#" aria-label="Instagram" title="Instagram">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -119,12 +153,19 @@
             </a>
           </div>
         </div>
+
+        <!-- Linha divisória e direitos autorais -->
         <hr class="footer-divider" />
         <div class="footer-bottom small">
           <p class="mb-0">&copy; {% now "Y" %} Joystick Juice — Todos os direitos reservados.</p>
         </div>
+
       </div>
     </footer>
+
+    <!-- ===============================
+         Scripts JS Bootstrap e Logout
+         =============================== -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
     <script>
       document.getElementById("logout-link").addEventListener("click", function(e){
