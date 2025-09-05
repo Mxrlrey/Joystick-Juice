@@ -1,0 +1,150 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block css %}
+<link href="{% static 'css/user_game_list.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block title %}Minha Lista de Jogos — Joystick Juice{% endblock %}
+
+{% block content %}
+<div class="conteudo-principal">
+    <div class="header">
+        <div class="titulo">
+            <h1>Minha Lista de Jogos</h1>
+        </div>
+    </div>
+
+    <div class="conteudo-container">
+        {% if user_games %}
+        <table class="tabela-planos">
+            <thead>
+                <tr>
+                    <th>Capa</th>
+                    <th>Título</th>
+                    <th>Gênero</th>
+                    <th>Status</th>
+                    <th>Lançamento</th>
+                    <th style="width: 180px;">Ações</th>
+                </tr>
+                <tr class="linha-filtro">
+                    <th></th>
+                    <th><input type="text" placeholder="Título" oninput="filtrarColuna(this, 1)"></th>
+                    <th><input type="text" placeholder="Gênero" oninput="filtrarColuna(this, 2)"></th>
+                    <th><input type="text" placeholder="Status" oninput="filtrarColuna(this, 3)"></th>
+                    <th><input type="text" placeholder="Lançamento" oninput="filtrarColuna(this, 4)"></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user_game in user_games %}
+                <tr>
+                    <td>
+                        <div class="capa-container">
+                            <img src="{{ user_game.game.cover_url }}" alt="{{ user_game.game.title }}">
+                            <div class="capa-info-card">
+                                <h4>{{ user_game.game.title }}</h4>
+                                <p><strong>Gênero:</strong> {{ user_game.game.genre }}</p>
+                                <p><strong>Status:</strong> {{ user_game.get_status_display }}</p>
+                                <p><strong>Lançamento:</strong> {{ user_game.game.release_date|date:"d/m/Y" }}</p>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                      <a href="{% url 'games' user_game.game.pk %}" class="link-jogo">
+                        {{ user_game.game.title }}
+                      </a>
+                    </td>
+                    <td>{{ user_game.game.genre }}</td>
+                    <td>{{ user_game.get_status_display }}</td>
+                    <td>{{ user_game.game.release_date|date:"d/m/Y" }}</td>
+                    <td>
+                        <div class="botoes-acoes">
+                            <button class="botao-detalhes-plano btn-sm" data-bs-toggle="modal" data-bs-target="#gameListModal{{ user_game.pk }}">
+                                Gerenciar
+                            </button>
+                        </div>
+
+                        <!-- Modal de Gerenciamento -->
+                        <div class="modal fade" id="gameListModal{{ user_game.pk }}" tabindex="-1" aria-labelledby="gameListModalLabel{{ user_game.pk }}" aria-hidden="true">
+                          <div class="modal-dialog modal-lg">
+                            <div class="modal-content">
+                              <form method="POST" action="{% url 'update_game_status' user_game.game.pk %}">
+                                {% csrf_token %}
+                                <div class="modal-header">
+                                  <h5 class="modal-title w-100 text-center" id="gameListModalLabel{{ user_game.pk }}">Gerenciar Jogo</h5>
+                                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                                </div>
+                                <div class="modal-body">
+                                  <div class="mb-3">
+                                    <label for="status{{ user_game.pk }}" class="form-label">Status do Jogo</label>
+                                    <select name="status" id="status{{ user_game.pk }}" class="form-select">
+                                      <option value="J" {% if user_game.status == "J" %}selected{% endif %}>Jogando</option>
+                                      <option value="C" {% if user_game.status == "C" %}selected{% endif %}>Concluído</option>
+                                      <option value="A" {% if user_game.status == "A" %}selected{% endif %}>Abandonado</option>
+                                      <option value="P" {% if user_game.status == "P" %}selected{% endif %}>Para Jogar</option>
+                                    </select>
+                                  </div>
+                                </div>
+                                <div class="modal-footer">
+                                  <button type="submit" class="botao-editar">Atualizar</button>
+                                  <a href="{% url 'remove_from_list' user_game.game.pk %}" class="botao-excluir">Remover</a>
+                                </div>
+                              </form>
+                            </div>
+                          </div>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        {% if is_paginated %}
+        <nav aria-label="Navegação de páginas">
+          <ul class="pagination justify-content-center mt-4">
+            {% if page_obj.has_previous %}
+            <li class="page-item">
+              <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Anterior">&laquo;</a>
+            </li>
+            {% else %}
+            <li class="page-item disabled"><span class="page-link">&laquo;</span></li>
+            {% endif %}
+
+            {% for num in paginator.page_range %}
+            {% if page_obj.number == num %}
+            <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+            {% else %}
+            <li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+            {% endif %}
+            {% endfor %}
+
+            {% if page_obj.has_next %}
+            <li class="page-item">
+              <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Próximo">&raquo;</a>
+            </li>
+            {% else %}
+            <li class="page-item disabled"><span class="page-link">&raquo;</span></li>
+            {% endif %}
+          </ul>
+        </nav>
+        {% endif %}
+
+        {% else %}
+        <p class="no-games-message">Você ainda não adicionou nenhum jogo à sua lista.</p>
+        {% endif %}
+    </div>
+</div>
+
+<script>
+function filtrarColuna(input, colIndex) {
+    const valor = input.value.toLowerCase();
+    const linhas = document.querySelectorAll('.tabela-planos tbody tr');
+
+    linhas.forEach(linha => {
+        const conteudo = linha.cells[colIndex]?.textContent.toLowerCase() || '';
+        linha.style.display = conteudo.includes(valor) ? '' : 'none';
+    });
+}
+</script>
+{% endblock %}

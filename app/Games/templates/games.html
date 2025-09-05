@@ -21,7 +21,13 @@
         <div class="botoes-rapidos" role="toolbar" aria-label="Ações rápidas">
           <button class="acao" type="button">👁 Assistir</button>
           <button class="acao" type="button">❤️ Curtir</button>
-          <button class="acao" type="button">📌 Lista</button>
+
+          <!-- Botão de Lista com Modal -->
+          {% if user.is_authenticated %}
+          <button class="acao" type="button" data-bs-toggle="modal" data-bs-target="#gameListModal{{ object.pk }}">
+            📌 Lista
+          </button>
+          {% endif %}
         </div>
 
         <div class="avaliar" aria-label="Avaliar">
@@ -44,12 +50,11 @@
 
       {% if object.trailer_url %}
       <div class="game-trailer my-4">
-    
         <div class="video-wrap" style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;">
-          <iframe src="{{ object.trailer_url }}" 
-                  title="Trailer de {{ object.title }}" 
-                  style="position:absolute;top:0;left:0;width:100%;height:100%;border:0;" 
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+          <iframe src="{{ object.trailer_url }}"
+                  title="Trailer de {{ object.title }}"
+                  style="position:absolute;top:0;left:0;width:100%;height:100%;border:0;"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                   allowfullscreen>
           </iframe>
         </div>
@@ -69,6 +74,44 @@
       </div>
     </div>
   </div>
+<!-- Modal de Games estilizado como Perfil -->
+{% if user.is_authenticated %}
+<div class="modal fade game-management-modal" id="gameListModal{{ object.pk }}" tabindex="-1" aria-labelledby="gameListModalLabel{{ object.pk }}" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content game-management-content">
+      <form method="POST" action="{% url 'update_game_status' object.pk %}">
+        {% csrf_token %}
+        <div class="modal-header game-management-header">
+          <h5 class="modal-title game-management-title w-100 text-center" id="gameListModalLabel{{ object.pk }}">Gerenciar lista de jogos</h5>
+          <button type="button" class="btn-close game-management-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+        </div>
+
+        <div class="modal-body game-management-body">
+          <div class="game-status-control">
+            <label for="status{{ object.pk }}" class="game-status-label">Status do Jogo</label>
+            <select name="status" id="status{{ object.pk }}" class="game-status-select">
+              <option value="J" {% if user_status == "J" %}selected{% endif %}>Jogando</option>
+              <option value="C" {% if user_status == "C" %}selected{% endif %}>Concluído</option>
+              <option value="A" {% if user_status == "A" %}selected{% endif %}>Abandonado</option>
+              <option value="P" {% if user_status == "P" or not user_status %}selected{% endif %}>Para Jogar</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="modal-footer game-management-footer">
+          {% if in_list %}
+            <button type="submit" class="btn btn-status-update">Atualizar status</button>
+            <a href="{% url 'remove_from_list' object.pk %}" class="btn btn-remove-game">Remover da lista</a>
+          {% else %}
+            <button type="button" class="btn btn-cancel-action" data-bs-dismiss="modal">Cancelar</button>
+            <button type="submit" class="btn btn-add-game">Adicionar à lista</button>
+          {% endif %}
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endif %}
 
   <!-- Avaliações -->
   <h2 class="avlctitulo">Avaliações</h2>
@@ -119,18 +162,10 @@
 </div>
 
 <script>
-  /* seu script (mantive a lógica, só garantindo que o chart seja limpo antes) */
+  // gráfico de votos
   const votos = {
-    "0.5": 5,
-    "1.0": 8,
-    "1.5": 12,
-    "2.0": 18,
-    "2.5": 30,
-    "3.0": 45,
-    "3.5": 60,
-    "4.0": 80,
-    "4.5": 95,
-    "5.0": 80
+    "0.5": 5,"1.0": 8,"1.5": 12,"2.0": 18,"2.5": 30,
+    "3.0": 45,"3.5": 60,"4.0": 80,"4.5": 95,"5.0": 80
   };
 
   const valores = ["0.5","1.0","1.5","2.0","2.5","3.0","3.5","4.0","4.5","5.0"];
@@ -173,7 +208,7 @@
     chart.appendChild(col);
   });
 
-  // sistema de estrelas (mantive como antes)
+  // estrelas
   const estrelas = document.querySelectorAll('#estrelas span');
   const saida = document.getElementById('nota-escolhida');
   estrelas.forEach(e => {
@@ -182,7 +217,6 @@
       estrelas.forEach(s => s.classList.remove('ativo'));
       for (let i = 0; i < nota; i++) estrelas[i].classList.add('ativo');
       saida.textContent = `Você avaliou com ${nota} estrela${nota>1?'s':''}`;
-      // atualiza aria
       estrelas.forEach(s => s.setAttribute('aria-checked','false'));
       for (let i = 0; i < nota; i++) estrelas[i].setAttribute('aria-checked','true');
     });

@@ -1,5 +1,7 @@
 from django.urls import path
-from . import views
+from . import views  # views do Accounts
+from Games.views import UserGameListView
+
 
 urlpatterns = [
     path('register/', views.register_view, name='user_register'),
@@ -12,5 +14,6 @@ urlpatterns = [
     path('profile/<int:pk>/', views.PerfilUserView.as_view(), name="user_profile"),
     path('profile/<int:pk>/reviews/', views.user_reviews, name="user_reviews"),
     path('profile/<int:pk>/comments/', views.user_comments, name="user_comments"),
-    path('profile/<int:pk>/games/<str:status>/', views.user_game_list, name="user_game_list"),
+    path('profile/<int:pk>/games/', UserGameListView.as_view(), name="user_game_list"),
+    path('profile/<int:pk>/games/<str:status>/', UserGameListView.as_view(), name="user_game_list_by_status"),
 ]

@@ -1,4 +1,6 @@
 from django.db import models
+from django.conf import settings
+
 
 class Game(models.Model):
     gameID = models.AutoField(primary_key=True)
@@ -18,10 +20,19 @@ class UserGameList(models.Model):
         ('C', 'Concluído'),
         ('A', 'Abandonado'),
     ]
-    user = models.ForeignKey('Accounts.User', on_delete=models.CASCADE)
-    game = models.ForeignKey(Game, on_delete=models.CASCADE)
-    status = models.CharField(max_length=1, choices=STATUS_CHOICES)
-    date_added = models.DateField(auto_now_add=True)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    game = models.ForeignKey('Games.Game', on_delete=models.CASCADE)
+    status = models.CharField(max_length=1, choices=STATUS_CHOICES, default='P')
+    date_added = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        unique_together = ('user', 'game')
+        ordering = ['-date_added']
+
+    def __str__(self):
+        return f"{self.user.username} - {self.game.title} ({self.get_status_display()})"
+
     
 
 class FavoriteGames(models.Model):

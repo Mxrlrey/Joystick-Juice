@@ -1,29 +1,60 @@
 import requests
 from datetime import datetime
-from django.views.generic import CreateView, ListView, DeleteView, UpdateView, DetailView
-
-from .models import Game
-
-from django.shortcuts import render, get_object_or_404, redirect
-from Reviews.models import Review, Comment
-from Reviews.forms import CommentForm
+from django.views.generic import DetailView, ListView
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 
-# Create your views here.
+from .models import Game, UserGameList
+
+User = get_user_model()
+
+
+# -------------------
+# Páginas principais
+# -------------------
 def home(request):
-    games = Game.objects.all() 
+    games = Game.objects.all()
     return render(request, 'home.html', {'games': games})
+
 
 def listar_jogos(request):
     jogos = Game.objects.all()
     return render(request, 'listar_jogos.html', {'jogos': jogos})
 
-class games(DetailView):
+
+# -------------------
+# Detalhe de jogo
+# -------------------
+class Games(DetailView):
     model = Game
     template_name = 'games.html'
 
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        game = self.get_object()
+        user = self.request.user
+
+        if user.is_authenticated:
+            # Pega o registro do usuário para esse jogo
+            ug = UserGameList.objects.filter(user=user, game=game).first()
+            ctx['in_list'] = bool(ug)
+            ctx['user_status'] = ug.status if ug else 'P'  # padrão Para Jogar
+        else:
+            ctx['in_list'] = False
+            ctx['user_status'] = None
+
+        return ctx
+
+
+# -------------------
+# Integração IGDB
+# -------------------
 CLIENT_ID = "66vd402qci2oa706lzsxck2myaqput"
 CLIENT_SECRET = "drvthppx8c27f7eryv6qo739r2cfpz"
+
 
 def get_igdb_token():
     url = "https://id.twitch.tv/oauth2/token"
@@ -36,18 +67,15 @@ def get_igdb_token():
     resp.raise_for_status()
     return resp.json()["access_token"]
 
+
 def preencher_e_salvar(request):
     if request.method == "POST":
         nome_jogo = request.POST.get("nome")
-        
         token = get_igdb_token()
-
         headers = {
             "Client-ID": CLIENT_ID,
             "Authorization": f"Bearer {token}"
         }
-
-        # Ajustar campos para buscar gênero, desenvolvedor, etc
         body = f'''
             search "{nome_jogo}";
             fields name, genres.name, first_release_date, summary, involved_companies.company.name, cover.url, artworks.url, videos.video_id;
@@ -60,22 +88,17 @@ def preencher_e_salvar(request):
         if dados:
             jogo = dados[0]
 
-            for game in Game.objects.all():
-                if game.title.lower() == jogo.get("name", "").lower():
-                    # Jogo já existe, não duplicar
-                    return redirect("listar_jogos")
+            # Evitar duplicados
+            if Game.objects.filter(title__iexact=jogo.get("name", "")).exists():
+                return redirect("listar_jogos")
 
-            # Extrair gênero (pode ser lista, vamos pegar o primeiro ou vazio)
             genero = ""
             if "genres" in jogo and jogo["genres"]:
-                # genres é lista de IDs, mas aqui buscamos nome direto
-                # às vezes pode ser necessário buscar numa outra chamada se vier só id
                 try:
                     genero = jogo["genres"][0]["name"]
                 except (TypeError, KeyError):
                     genero = ""
 
-            # Extrair desenvolvedor (envolvido em involved_companies, buscar o primeiro)
             desenvolvedor = ""
             if "involved_companies" in jogo and jogo["involved_companies"]:
                 try:
@@ -83,42 +106,34 @@ def preencher_e_salvar(request):
                 except (TypeError, KeyError):
                     desenvolvedor = ""
 
-            # Converter timestamp para date
             data_lanc = None
             if jogo.get("first_release_date"):
                 data_lanc = datetime.utcfromtimestamp(jogo["first_release_date"]).date()
 
-            # Ajustar URL da capa (a IGDB retorna algo tipo "//images.igdb.com/...")
             capa_url = jogo.get("cover", {}).get("url", "")
             if capa_url and capa_url.startswith("//"):
                 capa_url = "https:" + capa_url
-
             if capa_url:
                 capa_url = capa_url.replace("t_thumb", "t_cover_big")
 
-            # Banner / artwork (pegar o primeiro, se existir)
             banner_url = ""
             if "artworks" in jogo and jogo["artworks"]:
                 try:
                     banner_url = jogo["artworks"][0]["url"]
                     if banner_url.startswith("//"):
                         banner_url = "https:" + banner_url
-                    banner_url = banner_url.replace("t_thumb", "t_1080p")  # maior resolução
+                    banner_url = banner_url.replace("t_thumb", "t_1080p")
                 except (TypeError, KeyError):
                     banner_url = ""
 
-            # Trailer (YouTube)
             trailer_url = ""
             if "videos" in jogo and jogo["videos"]:
                 try:
                     video_id = jogo["videos"][0]["video_id"]
-                    trailer_url = f"https://www.youtube.com/embed/{video_id}"  # link embed
+                    trailer_url = f"https://www.youtube.com/embed/{video_id}"
                 except (TypeError, KeyError):
                     trailer_url = ""
 
-
-
-            # Criar o objeto Game
             Game.objects.create(
                 title=jogo.get("name", nome_jogo),
                 genre=genero or "Indefinido",
@@ -133,29 +148,90 @@ def preencher_e_salvar(request):
 
     return render(request, "preencher.html")
 
-def game_detail(request, game_id):
-    # pega o game
+
+# -------------------
+# Lista de jogos do usuário
+# -------------------
+class UserGameListView(LoginRequiredMixin, ListView):
+    model = UserGameList
+    template_name = "user_game_list.html"
+    context_object_name = "user_games"
+    paginate_by = 24
+
+    def get_user(self):
+        pk = self.kwargs.get('pk')
+        if pk:
+            return get_object_or_404(User, pk=pk)
+        return self.request.user
+
+    def get_queryset(self):
+        user = self.get_user()
+        qs = UserGameList.objects.filter(user=user).select_related('game')
+        status = self.kwargs.get('status') or self.request.GET.get('status')
+        if status and status != 'T':
+            qs = qs.filter(status=status)
+        return qs
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        user = self.get_user()
+        ctx['user_profile'] = user
+        ctx['current_status'] = self.kwargs.get('status') or self.request.GET.get('status', 'T')
+        return ctx
+
+
+# -------------------
+# Views para adicionar / atualizar / remover status
+# -------------------
+@login_required
+def add_to_list(request, game_id):
     game = get_object_or_404(Game, pk=game_id)
-
-    # pega todas as reviews do game
-    reviews = Review.objects.filter(game=game).order_by('-reviewID')
-
-    # comentário novo
-    if request.method == 'POST':
-        form = CommentForm(request.POST)
-        review_id = request.POST.get('review_id')
-        review = get_object_or_404(Review, pk=review_id)
-        if form.is_valid() and request.user.is_authenticated:
-            comment = form.save(commit=False)
-            comment.user = request.user
-            comment.review = review
-            comment.save()
-            return redirect('game_detail', game_id=game_id)
+    obj, created = UserGameList.objects.get_or_create(
+        user=request.user,
+        game=game,
+        defaults={'status': 'P'}
+    )
+    if created:
+        messages.success(request, f"'{game.title}' adicionado à sua lista (Para jogar).")
     else:
-        form = CommentForm()
+        messages.info(request, f"'{game.title}' já está na sua lista.")
+    return redirect(request.META.get('HTTP_REFERER', 'listar_jogos'))
 
-    return render(request, 'games/game_detail.html', {
-        'object': game,
-        'reviews': reviews,
-        'form': form
-    })
+
+@login_required
+def update_game_status(request, game_id):
+    if request.method == "POST":
+        status = request.POST.get('status')
+        if status not in dict(UserGameList.STATUS_CHOICES):
+            messages.error(request, "Status inválido.")
+            return redirect(request.META.get('HTTP_REFERER', '/'))
+
+        ug, created = UserGameList.objects.update_or_create(
+            user=request.user,
+            game_id=game_id,
+            defaults={'status': status}
+        )
+
+        if created:
+            messages.success(
+                request,
+                f"'{ug.game.title}' adicionado à sua lista com status {ug.get_status_display()}."
+            )
+        else:
+            messages.success(
+                request,
+                f"Status de '{ug.game.title}' atualizado para {ug.get_status_display()}."
+            )
+
+    return redirect(request.META.get('HTTP_REFERER', '/'))
+
+
+@login_required
+def remove_from_list(request, game_id):
+    ug = UserGameList.objects.filter(user=request.user, game__pk=game_id).first()
+    if ug:
+        ug.delete()
+        messages.success(request, "Jogo removido da sua lista.")
+    else:
+        messages.info(request, "Jogo não estava na sua lista.")
+    return redirect(request.META.get('HTTP_REFERER', '/'))

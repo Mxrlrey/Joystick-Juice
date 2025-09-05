@@ -18,17 +18,17 @@
 
 .navbar-light .navbar-nav .nav-link {
     color: #021E34!important;
-    transition: background-color 0.3s ease, color 0.3s ease; 
-    
+    transition: background-color 0.3s ease, color 0.3s ease;
+
 }
 .navbar-light .navbar-nav .nav-link:hover {
-    color: #F17A0D !important; 
+    color: #F17A0D !important;
 }
 .navbar-light .navbar-nav .nav-link.active {
     color: #F17A0D !important;
 }
 .navbar-light .navbar-brand {
-    color: #F17A0D !important; 
+    color: #F17A0D !important;
     font-family: 'Press Start 2P', cursive;
 }
 .navbar-light .navbar-brand h1 {
@@ -36,15 +36,15 @@
     margin: 0;
 }
 .achatar {
-    display: inline-block; 
+    display: inline-block;
     transform: scaleX(0.9);
-    transform: scaleY(1.4); 
+    transform: scaleY(1.4);
     letter-spacing: -1px;
 }
 .d-flex input{
     color: #021E34 !important;
     background-color: #FFF4E6;
-    border: 2px solid #F17A0D !important; 
+    border: 2px solid #F17A0D !important;
 }
 .d-flex input::placeholder{
     color: #021E34 !important;
@@ -53,11 +53,11 @@
     box-shadow: 0 0 0 0.1rem rgba(245, 165, 60, 0.89);
 }
 .dropdown-menu .dropdown-item{
-    background-color: #FFF4E6 !important; 
-    transition: background-color 0.1s ease, color 0.1s ease; 
+    background-color: #FFF4E6 !important;
+    transition: background-color 0.1s ease, color 0.1s ease;
 }
 .dropdown-menu .dropdown-item:hover{
-    color: #F17A0D !important; 
+    color: #F17A0D !important;
     background-color: rgb(0, 0, 22) !important;
 }
 
@@ -67,7 +67,7 @@ body{
     justify-content: center;
     min-height: 100vh;
     color: #F17A0D;
-    background-color: rgb(0, 0, 22) !important; 
+    background-color: rgb(0, 0, 22) !important;
 }
 
 .navbar .navbar-avatar {
@@ -89,7 +89,7 @@ body{
 .site-footer {
     align-self: flex-end;
     background-color: rgb(0, 0, 22);
-    color: #FFF4E6;                 
+    color: #FFF4E6;
     padding: 2rem 0;
     border-top: 1px solid rgba(255,255,255,0.03);
     font-size: 0.95rem;
@@ -98,10 +98,10 @@ body{
 
 .site-footer .footer-title {
     color: #FFF4E6;
-    font-family: 'Press Start 2P', cursive; 
+    font-family: 'Press Start 2P', cursive;
     font-size: 1rem;
     display: inline-block;
-    transform: scaleX(0.9) scaleY(1.15); 
+    transform: scaleX(0.9) scaleY(1.15);
     letter-spacing: -1px;
 }
 
@@ -116,7 +116,7 @@ body{
 }
 
 .site-footer a:hover {
-  color: #F17A0D; 
+  color: #F17A0D;
   transform: translateY(-2px);
 }
 
